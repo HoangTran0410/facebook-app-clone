@@ -31,7 +31,7 @@ export const HomeScreen = ({}) => {
   const tabs = [
     {icon: home, activeIcon: home_filled, title: 'Home'},
     {icon: user, activeIcon: user_filled, title: 'Profile'},
-    {icon: feed, activeIcon: feed_filled, title: 'Home'},
+    {icon: feed, activeIcon: feed_filled, title: 'Feed'},
     {icon: bell, activeIcon: bell_filled, title: 'Notifications'},
     {icon: menu, activeIcon: menu, title: 'Menu'},
   ];
@@ -87,7 +87,7 @@ export const HomeScreen = ({}) => {
         horizontal
         pagingEnabled
         scrollEventThrottle={16}
-        onScrollEndDrag={handleScroll}>
+        onMomentumScrollEnd={handleScroll}>
         {tabs.map((tab, index) => (
           <View key={index + ''} style={styles.screen.container}>
             <Text style={{color: Colors.black}}>{tab.title}</Text>
