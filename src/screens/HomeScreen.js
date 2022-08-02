@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,11 +9,25 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import {CircleIconButton} from '../components';
-import {messenger, search} from '../constants/icons';
+import {CircleIconButton, HomeTabButton} from '../components';
+import {
+  bell,
+  bell_filled,
+  feed,
+  feed_filled,
+  home,
+  home_filled,
+  menu,
+  messenger,
+  search,
+  user,
+  user_filled,
+} from '../constants/icons';
 import {Colors, FontWeights, Spacing} from '../constants/theme';
 
 export const HomeScreen = ({}) => {
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+
   const renderHeader = () => {
     return (
       <View style={styles.header.container}>
@@ -29,11 +43,20 @@ export const HomeScreen = ({}) => {
   const renderTabbar = () => {
     return (
       <View style={styles.tabbar.container}>
-        <TouchableOpacity></TouchableOpacity>
-        <TouchableOpacity></TouchableOpacity>
-        <TouchableOpacity></TouchableOpacity>
-        <TouchableOpacity></TouchableOpacity>
-        <TouchableOpacity></TouchableOpacity>
+        {[
+          {icon: home, activeIcon: home_filled, title: 'Home'},
+          {icon: user, activeIcon: user_filled, title: 'Profile'},
+          {icon: feed, activeIcon: feed_filled, title: 'Home'},
+          {icon: bell, activeIcon: bell_filled, title: 'Notifications'},
+          {icon: menu, activeIcon: menu, title: 'More'},
+        ].map((tab, index) => (
+          <HomeTabButton
+            icon={tab.icon}
+            activeIcon={tab.activeIcon}
+            isActive={index === activeTabIndex}
+            onPress={() => setActiveTabIndex(index)}
+          />
+        ))}
       </View>
     );
   };
