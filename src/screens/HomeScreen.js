@@ -38,8 +38,11 @@ export const HomeScreen = ({}) => {
       <View style={styles.header.container}>
         <Text style={styles.header.facebookTitle}>facebook</Text>
         <View style={styles.header.rightContainer}>
-          <CircleIconButton icon={search} style={{marginRight: Spacing.L}} />
-          <CircleIconButton icon={messenger} badge={4} />
+          <CircleIconButton
+            icon={icons.search}
+            style={{marginRight: Spacing.L}}
+          />
+          <CircleIconButton icon={icons.messenger} badge={4} />
         </View>
       </View>
     );
