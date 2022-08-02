@@ -1,11 +1,11 @@
 import React from 'react';
 import {useColorScheme} from 'react-native';
-import {HomeScreen} from './screens/HomeScreen';
+import {MainScreen} from './screens/MainScreen';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
-  return <HomeScreen />;
+  return <MainScreen />;
 };
 
 export default App;

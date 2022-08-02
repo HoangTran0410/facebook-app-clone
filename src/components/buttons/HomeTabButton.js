@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     // borderBottomColor: Colors.white,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: Colors.white,
   },
   containerActive: {
     // borderBottomColor: Colors.primary,
