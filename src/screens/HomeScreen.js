@@ -86,12 +86,10 @@ export const HomeScreen = ({}) => {
         onMomentumScrollEnd={handleScrollEnd}
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {x: scrollX, y: scrollY}}}],
-          {
-            useNativeDriver: true,
-          },
+          {useNativeDriver: true},
         )}>
         {tabs.map((tab, index) => (
-          <View key={index + ''} style={styles.screen.container}>
+          <View key={'tabscreen' + index} style={styles.screen.container}>
             <Text style={{color: Colors.black}}>{tab.title}</Text>
           </View>
         ))}
