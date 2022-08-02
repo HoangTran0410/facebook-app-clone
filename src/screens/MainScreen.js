@@ -16,6 +16,11 @@ export const MainScreen = ({}) => {
   const tabScreenScrollX = useRef(new Animated.Value(0)).current;
   const homeScrollY = useRef(new Animated.Value(0)).current;
 
+  const homeScrollYNumber = useRef(0);
+  homeScrollY.addListener(({value}) => {
+    homeScrollYNumber.current = value;
+  });
+
   const homeScrollYClamped = Animated.diffClamp(
     homeScrollY,
     0,
@@ -34,6 +39,7 @@ export const MainScreen = ({}) => {
 
   useEffect(() => {
     scrollViewRef.current?.scrollTo({x: Sizes.width * activeTabIndex});
+    setOpenTopbar(activeTabIndex === 0);
   }, [activeTabIndex]);
 
   // #region handlers
@@ -59,6 +65,16 @@ export const MainScreen = ({}) => {
       homeFlatlistRef.current.scrollToOffset({
         offset:
           getCloser(ty, hh, 0) === hh ? offsetY - (hh - ty) : offsetY + ty,
+      });
+    }
+  };
+
+  const setOpenTopbar = isOpen => {
+    if (homeFlatlistRef.current) {
+      homeFlatlistRef.current.scrollToOffset({
+        offset:
+          homeScrollYNumber.current +
+          (isOpen ? -1 : 1) * headerHeightRef.current,
       });
     }
   };
