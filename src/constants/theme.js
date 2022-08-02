@@ -1,9 +1,9 @@
 import {Dimensions} from 'react-native';
 
 export const Colors = {
-  lightBlue: '#1773ea',
+  primary: '#1773ea',
+  secondary: '#898F9C',
   blue: '#4267B2',
-  grey: '#898F9C',
   black: '#000000',
   gray: '#f1f2f6',
   white: '#ffffff',

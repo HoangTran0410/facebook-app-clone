@@ -24,20 +24,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: Spacing.M,
-    borderBottomWidth: 2,
-    borderBottomColor: Colors.white,
+    // borderBottomWidth: 2,
+    // borderBottomColor: Colors.white,
     justifyContent: 'center',
     alignItems: 'center',
   },
   containerActive: {
-    borderBottomColor: Colors.lightBlue,
+    // borderBottomColor: Colors.primary,
   },
   icon: {
     width: 35,
     height: 35,
-    tintColor: Colors.grey,
+    tintColor: Colors.secondary,
   },
   iconActive: {
-    tintColor: Colors.lightBlue,
+    tintColor: Colors.primary,
   },
 });

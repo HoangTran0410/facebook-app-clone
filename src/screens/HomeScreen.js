@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   useColorScheme,
   View,
+  Animated,
 } from 'react-native';
 import {CircleIconButton, HomeTabButton} from '../components';
 import {
@@ -37,13 +38,15 @@ export const HomeScreen = ({}) => {
   ];
 
   const scrollViewRef = useRef(null);
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     scrollViewRef.current?.scrollTo({x: Sizes.width * activeTabIndex});
   }, [activeTabIndex]);
 
   // #region handlers
-  const handleScroll = event => {
+  const handleScrollEnd = event => {
     const x = event.nativeEvent.contentOffset.x;
     const tabIndex = Math.round(x / Sizes.width);
 
@@ -65,35 +68,53 @@ export const HomeScreen = ({}) => {
   };
 
   const renderTabbar = () => {
+    const indicatorX = scrollX.interpolate({
+      inputRange: [0, Sizes.width * tabs.length],
+      outputRange: [0, Sizes.width],
+    });
+
     return (
       <View style={styles.tabbar.container}>
         {tabs.map((tab, index) => (
           <HomeTabButton
+            key={'tab' + index}
             icon={tab.icon}
             activeIcon={tab.activeIcon}
             isActive={index === activeTabIndex}
             onPress={() => setActiveTabIndex(index)}
           />
         ))}
+        <Animated.View
+          style={[
+            styles.tabbar.indicator,
+            {
+              width: Sizes.width / tabs.length,
+              transform: [{translateX: indicatorX}],
+            },
+          ]}
+        />
       </View>
     );
   };
 
   const renderScreen = () => {
     return (
-      <ScrollView
+      <Animated.ScrollView
         ref={scrollViewRef}
         style={styles.screen.scrollView}
         horizontal
         pagingEnabled
         scrollEventThrottle={16}
-        onMomentumScrollEnd={handleScroll}>
+        onMomentumScrollEnd={handleScrollEnd}
+        onScroll={Animated.event([{nativeEvent: {contentOffset: {x: scrollX, y: scrollY}}}], {
+          useNativeDriver: true,
+        })}>
         {tabs.map((tab, index) => (
           <View key={index + ''} style={styles.screen.container}>
             <Text style={{color: Colors.black}}>{tab.title}</Text>
           </View>
         ))}
-      </ScrollView>
+      </Animated.ScrollView>
     );
   };
   // #endregion
@@ -121,7 +142,7 @@ const styles = StyleSheet.create({
     },
     facebookTitle: {
       fontSize: 30,
-      color: Colors.lightBlue,
+      color: Colors.primary,
       fontWeight: FontWeights.heavy,
     },
     rightContainer: {
@@ -133,16 +154,14 @@ const styles = StyleSheet.create({
     container: {
       flexDirection: 'row',
       borderBottomWidth: 1,
-      borderColor: Colors.grey,
+      borderColor: Colors.secondary,
     },
-    tab: {
-      flex: 1,
-      borderBottomWidth: 2,
-      borderColor: Colors.white,
-      padding: Spacing.L,
-    },
-    tabActive: {
-      backgroundColor: Colors.lightBlue,
+    indicator: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      height: 3,
+      backgroundColor: Colors.primary,
     },
   },
   screen: {
