@@ -1,40 +1,18 @@
-import React, {useEffect, useLayoutEffect, useState, useRef} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useColorScheme,
-  View,
-  Animated,
-} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
+import {SafeAreaView, StyleSheet, Text, View, Animated} from 'react-native';
 import {CircleIconButton, HomeTabButton} from '../components';
-import {
-  bell,
-  bell_filled,
-  feed,
-  feed_filled,
-  home,
-  home_filled,
-  menu,
-  messenger,
-  search,
-  user,
-  user_filled,
-} from '../constants/icons';
 import {Colors, FontWeights, Sizes, Spacing} from '../constants/theme';
+import * as icons from '../constants/icons';
 
 export const HomeScreen = ({}) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const tabs = [
-    {icon: home, activeIcon: home_filled, title: 'Home'},
-    {icon: user, activeIcon: user_filled, title: 'Profile'},
-    {icon: feed, activeIcon: feed_filled, title: 'Feed'},
-    {icon: bell, activeIcon: bell_filled, title: 'Notifications'},
-    {icon: menu, activeIcon: menu, title: 'Menu'},
+    {icon: icons.home, activeIcon: icons.home_filled, title: 'Home'},
+    {icon: icons.user, activeIcon: icons.user_filled, title: 'Profile'},
+    {icon: icons.feed, activeIcon: icons.feed_filled, title: 'Feed'},
+    {icon: icons.bell, activeIcon: icons.bell_filled, title: 'Notifications'},
+    {icon: icons.menu, activeIcon: icons.menu, title: 'Menu'},
   ];
 
   const scrollViewRef = useRef(null);
@@ -106,9 +84,12 @@ export const HomeScreen = ({}) => {
         pagingEnabled
         scrollEventThrottle={16}
         onMomentumScrollEnd={handleScrollEnd}
-        onScroll={Animated.event([{nativeEvent: {contentOffset: {x: scrollX, y: scrollY}}}], {
-          useNativeDriver: true,
-        })}>
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {x: scrollX, y: scrollY}}}],
+          {
+            useNativeDriver: true,
+          },
+        )}>
         {tabs.map((tab, index) => (
           <View key={index + ''} style={styles.screen.container}>
             <Text style={{color: Colors.black}}>{tab.title}</Text>
