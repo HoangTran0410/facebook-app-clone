@@ -1,3 +1,5 @@
+import {Dimensions} from 'react-native';
+
 export const Colors = {
   lightBlue: '#1773ea',
   blue: '#4267B2',
@@ -37,4 +39,9 @@ export const Radius = {
   M: 12,
   L: 16,
   XL: 24,
+};
+
+export const Sizes = {
+  width: Dimensions.get('window').width,
+  height: Dimensions.get('window').height,
 };
