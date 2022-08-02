@@ -2,6 +2,13 @@
 
 Using React native to create a clone of the Facebook app (mobile).
 
+### How to run
+
+1. Clone repo
+2. `yarn install`
+3. `yarn start`
+
+
 ### History
 
 - 02/08/2022: init - **3,5 hours**
