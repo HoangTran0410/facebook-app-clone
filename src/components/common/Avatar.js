@@ -1,11 +1,16 @@
 import React from 'react';
-import {TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {TouchableOpacity, Image, StyleSheet, View} from 'react-native';
 import {Colors} from '../../constants/theme';
 
-export const Avatar = ({src, size, onPress, outline, status}) => {
+const outlineWidth = 2;
+const outlineSpacing = 4;
+
+export const Avatar = ({src, size, onPress, outline}) => {
+  const imgSize = outline ? size - outlineWidth * 2 - outlineSpacing : size;
   return (
     <TouchableOpacity style={styles.container(size)} onPress={onPress}>
-      <Image source={src} style={styles.image(size)} />
+      <Image source={src} style={styles.image(imgSize)} />
+      {!!outline && <View style={styles.outline(size)} />}
     </TouchableOpacity>
   );
 };
@@ -15,6 +20,20 @@ const styles = StyleSheet.create({
     width: size,
     height: size,
     borderRadius: size / 2,
+    backgroundColor: Colors.fds_white,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }),
+  outline: size => ({
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: size,
+    height: size,
+    borderRadius: size / 2,
+    backgroundColor: Colors.transparent,
+    borderWidth: outlineWidth,
+    borderColor: Colors.base_blue,
   }),
   image: size => ({
     width: size,

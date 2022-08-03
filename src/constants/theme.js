@@ -1,6 +1,8 @@
 import {Dimensions} from 'react-native';
 
 export const Colors = {
+  transparent: 'transparent',
+
   // colors export from www.facebook.com
   fds_black: '#000000',
   fds_black_alpha_05: 'rgba(0, 0, 0, 0.05)',

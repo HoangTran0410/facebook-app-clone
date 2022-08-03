@@ -35,6 +35,7 @@ export const useHomeScrollEffect = () => {
     const y = homeScrollTranslateYNumber.current;
     const h = headerHeightRef.current;
 
+    // snap to the closer edge
     if (!(y === 0 || y === h) && homeFlatlistRef.current) {
       homeFlatlistRef.current.scrollToOffset({
         offset: getCloser(y, h, 0) === h ? offsetY - (h - y) : offsetY + y,
@@ -43,7 +44,11 @@ export const useHomeScrollEffect = () => {
   };
 
   const setOpenTopbar = isOpen => {
-    if (homeFlatlistRef.current) {
+    if (
+      homeFlatlistRef.current &&
+      // if you want close topbar but its already closed => do nothing
+      (isOpen || homeScrollTranslateYNumber.current === headerHeightRef.current)
+    ) {
       homeFlatlistRef.current.scrollToOffset({
         animated: true,
         offset:

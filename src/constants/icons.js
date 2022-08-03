@@ -20,3 +20,4 @@ export const feeling_filled = {
   uri: 'https://static.xx.fbcdn.net/rsrc.php/v3/yl/r/tNYZpPkEnbp.png',
 };
 export const feeling = require('../assets/icons/facebook/feeling.png');
+export const location_filled = require('../assets/icons/facebook/location_filled.png');

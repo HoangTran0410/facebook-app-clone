@@ -68,6 +68,7 @@ export const MainScreen = ({}) => {
     const opacity = homeScrollTranslateY.interpolate({
       inputRange: [0, headerHeightRef.current],
       outputRange: [0, 1],
+      extrapolate: 'clamp',
     });
 
     return (
@@ -94,6 +95,7 @@ export const MainScreen = ({}) => {
     const indicatorX = tabScreenScrollX.interpolate({
       inputRange: [0, Sizes.width * tabs.length],
       outputRange: [0, Sizes.width],
+      extrapolate: 'clamp',
     });
 
     return (
