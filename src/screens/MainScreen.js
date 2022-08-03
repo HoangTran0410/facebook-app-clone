@@ -1,46 +1,38 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {SafeAreaView, StyleSheet, Text, View, Animated} from 'react-native';
+import {StyleSheet, Text, View, Animated} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {CircleIconButton, HomeTabButton} from '../components';
-import {Colors, FontWeights, Sizes, Spacing} from '../constants/theme';
-import * as icons from '../constants/icons';
+import {Colors, FontWeights, Radius, Sizes, Spacing} from '../constants/theme';
+import {useHomeScrollEffect} from '../hooks/useHomeScrollEffect';
 import {HomeScreen} from './HomeScreen';
-import {getCloser} from '../helpers/utils';
+import * as icons from '../constants/icons';
 
 export const MainScreen = ({}) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [headerHeight, setHeaderHeight] = useState(0);
 
   // #region useRef
-  const headerHeightRef = useRef(0);
   const scrollViewRef = useRef(null);
-  const homeFlatlistRef = useRef(null);
   const tabScreenScrollX = useRef(new Animated.Value(0)).current;
-  const homeScrollY = useRef(new Animated.Value(0)).current;
 
-  const homeScrollYNumber = useRef(0);
-  homeScrollY.addListener(({value}) => {
-    homeScrollYNumber.current = value;
-  });
+  const {
+    setOpenTopbar,
+    onScrollHome,
+    handleSnap,
+    homeFlatlistRef,
+    headerHeightRef,
+    homeScrollTranslateY,
+  } = useHomeScrollEffect();
 
-  const homeScrollYClamped = Animated.diffClamp(
-    homeScrollY,
-    0,
-    headerHeightRef.current,
-  );
-  const homeScrollTranslateY = homeScrollYClamped.interpolate({
-    inputRange: [0, headerHeightRef.current],
-    outputRange: [headerHeightRef.current, 0],
-  });
-
-  const translateYNumber = useRef();
-  homeScrollTranslateY.addListener(({value}) => {
-    translateYNumber.current = value;
-  });
   // #endregion
 
+  // #region useEffect
+  // auto scroll screen to active tab
   useEffect(() => {
     scrollViewRef.current?.scrollTo({x: Sizes.width * activeTabIndex});
     setOpenTopbar(activeTabIndex === 0);
   }, [activeTabIndex]);
+  // #endregion
 
   // #region handlers
   const handleTabScreenScrollEnd = event => {
@@ -48,35 +40,6 @@ export const MainScreen = ({}) => {
     const tabIndex = Math.round(x / Sizes.width);
 
     setActiveTabIndex(tabIndex);
-  };
-
-  const onScrollHome = Animated.event(
-    [{nativeEvent: {contentOffset: {y: homeScrollY}}}],
-    {useNativeDriver: true},
-  );
-
-  // https://medium.com/swlh/making-a-collapsible-sticky-header-animations-with-react-native-6ad7763875c3
-  const handleSnap = ({nativeEvent}) => {
-    const offsetY = nativeEvent.contentOffset.y;
-    const ty = translateYNumber.current;
-    const hh = headerHeightRef.current;
-
-    if (!(ty === 0 || ty === hh) && homeFlatlistRef.current) {
-      homeFlatlistRef.current.scrollToOffset({
-        offset:
-          getCloser(ty, hh, 0) === hh ? offsetY - (hh - ty) : offsetY + ty,
-      });
-    }
-  };
-
-  const setOpenTopbar = isOpen => {
-    if (homeFlatlistRef.current) {
-      homeFlatlistRef.current.scrollToOffset({
-        offset:
-          homeScrollYNumber.current +
-          (isOpen ? -1 : 1) * headerHeightRef.current,
-      });
-    }
   };
   // #endregion
 
@@ -102,12 +65,19 @@ export const MainScreen = ({}) => {
 
   // #region renders
   const renderTopbar = () => {
+    const opacity = homeScrollTranslateY.interpolate({
+      inputRange: [0, headerHeightRef.current],
+      outputRange: [0, 1],
+    });
+
     return (
-      <View
-        style={styles.topbar.container}
-        onLayout={event =>
-          (headerHeightRef.current = event.nativeEvent.layout.height)
-        }>
+      <Animated.View
+        style={[styles.topbar.container, {opacity}]}
+        onLayout={event => {
+          const h = event.nativeEvent.layout.height;
+          headerHeightRef.current = h;
+          setHeaderHeight(h);
+        }}>
         <Text style={styles.topbar.facebookTitle}>facebook</Text>
         <View style={styles.topbar.rightContainer}>
           <CircleIconButton
@@ -116,7 +86,7 @@ export const MainScreen = ({}) => {
           />
           <CircleIconButton icon={icons.messenger} badge={4} />
         </View>
-      </View>
+      </Animated.View>
     );
   };
 
@@ -134,9 +104,7 @@ export const MainScreen = ({}) => {
             icon={tab.icon}
             activeIcon={tab.activeIcon}
             isActive={index === activeTabIndex}
-            onPress={() => {
-              setActiveTabIndex(index);
-            }}
+            onPress={() => setActiveTabIndex(index)}
           />
         ))}
         <Animated.View
@@ -154,12 +122,11 @@ export const MainScreen = ({}) => {
 
   const renderHeader = () => {
     return (
-      // eslint-disable-next-line react-native/no-inline-styles
-      <View style={{marginTop: -headerHeightRef.current, zIndex: 2}}>
+      <View style={styles.header(headerHeight)}>
         <Animated.View
           style={{
             backgroundColor: Colors.white,
-            transform: [{translateY: homeScrollTranslateY}],
+            transform: [{translateY: homeScrollTranslateY ?? 0}],
           }}>
           {renderTopbar()}
           {renderTabbar()}
@@ -175,7 +142,12 @@ export const MainScreen = ({}) => {
         style={styles.screen.scrollView}
         horizontal
         pagingEnabled
+        decelerationRate="fast"
+        bounces={false}
+        showsHorizontalScrollIndicator={false}
+        disableIntervalMomentum={true}
         scrollEventThrottle={16}
+        // contentOffset={{x: Sizes.width * activeTabIndex}}
         onMomentumScrollEnd={handleTabScreenScrollEnd}
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {x: tabScreenScrollX}}}],
@@ -204,7 +176,7 @@ export const MainScreen = ({}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: Colors.wash,
   },
   topbar: {
     container: {
@@ -212,10 +184,11 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      backgroundColor: Colors.nav_bar_background,
     },
     facebookTitle: {
       fontSize: 30,
-      color: Colors.primary,
+      color: Colors.primary_button_background,
       fontWeight: FontWeights.heavy,
     },
     rightContainer: {
@@ -225,18 +198,27 @@ const styles = StyleSheet.create({
   },
   tabbar: {
     container: {
+      margin: 0,
       flexDirection: 'row',
-      borderBottomWidth: 1,
-      borderColor: Colors.secondary,
+      borderBottomWidth: 2,
+      borderColor: Colors.media_inner_border,
+      backgroundColor: Colors.nav_bar_background,
     },
     indicator: {
       position: 'absolute',
       bottom: 0,
       left: 0,
       height: 3,
-      backgroundColor: Colors.primary,
+      backgroundColor: Colors.primary_button_background,
+      borderTopLeftRadius: Radius.M,
+      borderTopRightRadius: Radius.M,
     },
   },
+  header: headerHeight => ({
+    marginTop: -headerHeight,
+    backgroundColor: Colors.nav_bar_background,
+    zIndex: 3,
+  }),
   screen: {
     scrollView: {
       flex: 1,

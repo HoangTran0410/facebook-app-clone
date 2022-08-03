@@ -1,9 +1,10 @@
 import React, {forwardRef} from 'react';
 import {View, Animated, StyleSheet, Text} from 'react-native';
+import {WhatDoYouThink} from '../components';
 import {Colors, Sizes} from '../constants/theme';
 
 export const HomeScreen = forwardRef(
-  ({headerHeight, onScroll, onMomentumScrollEnd}, ref) => {
+  ({headerHeight = 0, onScroll, onMomentumScrollEnd}, ref) => {
     const renderItem = ({item, index}) => {
       return (
         <View style={styles.item}>
@@ -13,7 +14,11 @@ export const HomeScreen = forwardRef(
     };
 
     const renderHeader = () => {
-      return <View style={{paddingTop: headerHeight}} />;
+      return (
+        <View style={{paddingTop: headerHeight}}>
+          <WhatDoYouThink />
+        </View>
+      );
     };
 
     return (
@@ -26,6 +31,7 @@ export const HomeScreen = forwardRef(
         scrollEventThrottle={16}
         onScroll={onScroll}
         onMomentumScrollEnd={onMomentumScrollEnd}
+        bounces={false}
       />
     );
   },

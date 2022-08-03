@@ -2,10 +2,18 @@ import React from 'react';
 import {TouchableOpacity, Image, StyleSheet, View, Text} from 'react-native';
 import {Colors, FontWeights, Radius, Spacing} from '../../constants/theme';
 
-export const CircleIconButton = ({icon, onPress, badge, style, iconStyle}) => {
+export const CircleIconButton = ({
+  icon,
+  onPress,
+  badge,
+  size = 40,
+  iconSize = 25,
+  style,
+  iconStyle,
+}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
-      <Image source={icon} style={[styles.icon, iconStyle]} />
+    <TouchableOpacity onPress={onPress} style={[styles.container(size), style]}>
+      <Image source={icon} style={[styles.icon(iconSize), iconStyle]} />
       {badge && (
         <View style={styles.badge.container}>
           <Text style={styles.badge.text}>{badge}</Text>
@@ -16,30 +24,34 @@ export const CircleIconButton = ({icon, onPress, badge, style, iconStyle}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  container: size => ({
+    width: size,
+    height: size,
     borderRadius: Radius.XL,
     padding: Spacing.S,
-    backgroundColor: Colors.gray,
-  },
-  icon: {
-    width: 27,
-    height: 27,
-    tintColor: Colors.black,
-  },
+    backgroundColor: Colors.secondary_button_background,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }),
+  icon: iconSize => ({
+    width: iconSize,
+    height: iconSize,
+    tintColor: Colors.primary_icon,
+  }),
   badge: {
     container: {
       position: 'absolute',
       top: Spacing.XXS,
       right: Spacing.XXS,
       borderRadius: Radius.L,
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.notification_badge,
       width: 18,
       height: 18,
       justifyContent: 'center',
       alignItems: 'center',
     },
     text: {
-      color: Colors.white,
+      color: Colors.primary_button_text,
       fontWeight: FontWeights.bold,
       fontSize: 12,
     },
