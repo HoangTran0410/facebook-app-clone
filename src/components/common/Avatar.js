@@ -5,10 +5,12 @@ import {Colors} from '../../constants/theme';
 const outlineWidth = 2;
 const outlineSpacing = 4;
 
-export const Avatar = ({src, size, onPress, outline}) => {
+export const Avatar = ({src, size, onPress, outline, containerStyle}) => {
   const imgSize = outline ? size - outlineWidth * 2 - outlineSpacing : size;
   return (
-    <TouchableOpacity style={styles.container(size)} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.container(size), containerStyle]}
+      onPress={onPress}>
       <Image source={src} style={styles.image(imgSize)} />
       {!!outline && <View style={styles.outline(size)} />}
     </TouchableOpacity>

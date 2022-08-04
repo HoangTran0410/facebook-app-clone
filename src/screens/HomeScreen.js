@@ -1,6 +1,6 @@
 import React, {forwardRef} from 'react';
 import {View, Animated, StyleSheet, Text, RefreshControl} from 'react-native';
-import {WhatDoYouThink} from '../components';
+import {StoriesAndReels, WhatDoYouThink} from '../components';
 import {Colors, Sizes, Spacing} from '../constants/theme';
 
 export const HomeScreen = forwardRef(
@@ -16,6 +16,7 @@ export const HomeScreen = forwardRef(
     const header = (
       <View style={{paddingTop: headerHeight}}>
         <WhatDoYouThink />
+        <StoriesAndReels />
       </View>
     );
 
