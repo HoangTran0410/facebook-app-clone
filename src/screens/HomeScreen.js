@@ -1,10 +1,7 @@
 import React, {forwardRef} from 'react';
 import {View, Animated, StyleSheet, Text, RefreshControl} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
 import {WhatDoYouThink} from '../components';
-import {Colors, Sizes} from '../constants/theme';
-
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+import {Colors, Sizes, Spacing} from '../constants/theme';
 
 export const HomeScreen = forwardRef(
   ({headerHeight = 0, onScroll, onMomentumScrollEnd}, ref) => {
@@ -23,8 +20,9 @@ export const HomeScreen = forwardRef(
     );
 
     return (
-      <AnimatedFlatList
+      <Animated.FlatList
         ref={ref}
+        showsVerticalScrollIndicator={false}
         style={styles.container}
         ListHeaderComponent={header}
         data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
@@ -49,7 +47,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: Sizes.width,
     height: 200,
-    marginBottom: 20,
-    backgroundColor: Colors.red,
+    marginBottom: Spacing.M,
+    backgroundColor: Colors.comment_background,
   },
 });

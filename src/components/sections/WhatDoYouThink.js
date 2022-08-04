@@ -55,6 +55,7 @@ export const WhatDoYouThink = () => {
 
       <ScrollView
         horizontal
+        showsHorizontalScrollIndicator={false}
         nestedScrollEnabled={true}
         style={styles.block2.container}
         contentContainerStyle={styles.block2.contentContainer}>

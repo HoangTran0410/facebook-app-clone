@@ -142,15 +142,17 @@ export const MainScreen = ({}) => {
       <Animated.ScrollView
         ref={scrollViewRef}
         style={styles.screen.scrollView}
-        horizontal
-        pagingEnabled
-        decelerationRate="fast"
         bounces={false}
+        horizontal={true}
         showsHorizontalScrollIndicator={false}
+        // #region for nested horizontal scrollview to work: https://github.com/facebook/react-native/issues/21436#issuecomment-1204751771
+        disableScrollViewPanResponder={true}
+        snapToInterval={Sizes.width}
+        decelerationRate="fast"
         disableIntervalMomentum={true}
+        // #endregion
         scrollEventThrottle={16}
         keyboardShouldPersistTaps="always"
-        // contentOffset={{x: Sizes.width * activeTabIndex}}
         onMomentumScrollEnd={handleTabScreenScrollEnd}
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {x: tabScreenScrollX}}}],
