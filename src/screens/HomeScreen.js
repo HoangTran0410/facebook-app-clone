@@ -1,7 +1,10 @@
 import React, {forwardRef} from 'react';
-import {View, Animated, StyleSheet, Text} from 'react-native';
+import {View, Animated, StyleSheet, Text, RefreshControl} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import {WhatDoYouThink} from '../components';
 import {Colors, Sizes} from '../constants/theme';
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 export const HomeScreen = forwardRef(
   ({headerHeight = 0, onScroll, onMomentumScrollEnd}, ref) => {
@@ -13,25 +16,24 @@ export const HomeScreen = forwardRef(
       );
     };
 
-    const renderHeader = () => {
-      return (
-        <View style={{paddingTop: headerHeight}}>
-          <WhatDoYouThink />
-        </View>
-      );
-    };
+    const header = (
+      <View style={{paddingTop: headerHeight}}>
+        <WhatDoYouThink />
+      </View>
+    );
 
     return (
-      <Animated.FlatList
+      <AnimatedFlatList
         ref={ref}
         style={styles.container}
-        ListHeaderComponent={renderHeader}
+        ListHeaderComponent={header}
         data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
         renderItem={renderItem}
         scrollEventThrottle={16}
         onScroll={onScroll}
         onMomentumScrollEnd={onMomentumScrollEnd}
         bounces={false}
+        refreshControl={<RefreshControl refreshing={false} />}
       />
     );
   },

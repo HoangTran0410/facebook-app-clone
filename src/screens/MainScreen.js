@@ -149,6 +149,7 @@ export const MainScreen = ({}) => {
         showsHorizontalScrollIndicator={false}
         disableIntervalMomentum={true}
         scrollEventThrottle={16}
+        keyboardShouldPersistTaps="always"
         // contentOffset={{x: Sizes.width * activeTabIndex}}
         onMomentumScrollEnd={handleTabScreenScrollEnd}
         onScroll={Animated.event(
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
     container: {
       margin: 0,
       flexDirection: 'row',
-      borderBottomWidth: 2,
+      borderBottomWidth: 1,
       borderColor: Colors.media_inner_border,
       backgroundColor: Colors.nav_bar_background,
     },

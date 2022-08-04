@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  ScrollView,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Text,
-  Image,
-} from 'react-native';
+import {TouchableOpacity, View, StyleSheet, Text, Image} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {Colors, FontWeights, Radius, Spacing} from '../../constants/theme';
 import {CircleIconButton} from '../buttons/CircleIconButton';
 import {Avatar} from '../common/Avatar';
@@ -61,6 +55,7 @@ export const WhatDoYouThink = () => {
 
       <ScrollView
         horizontal
+        nestedScrollEnabled={true}
         style={styles.block2.container}
         contentContainerStyle={styles.block2.contentContainer}>
         {buttons.map((btn, index) => (
@@ -75,7 +70,9 @@ export const WhatDoYouThink = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+  },
   block1: {
     container: {
       flexDirection: 'row',
@@ -112,6 +109,7 @@ const styles = StyleSheet.create({
 
   block2: {
     container: {
+      flex: 1,
       backgroundColor: Colors.comment_background,
       marginBottom: Spacing.M,
     },
