@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
   },
   containerActive: {},
   icon: {
-    width: 35,
-    height: 35,
+    width: 30,
+    height: 30,
     tintColor: Colors.secondary_icon,
   },
   iconActive: {

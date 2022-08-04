@@ -5,6 +5,7 @@ import {CircleIconButton, HomeTabButton} from '../components';
 import {Colors, FontWeights, Radius, Sizes, Spacing} from '../constants/theme';
 import {useHomeScrollEffect} from '../hooks/useHomeScrollEffect';
 import {HomeScreen} from './HomeScreen';
+import {BlankScreen} from './BlankScreen';
 import * as icons from '../constants/icons';
 
 export const MainScreen = ({}) => {
@@ -12,7 +13,7 @@ export const MainScreen = ({}) => {
   const [headerHeight, setHeaderHeight] = useState(0);
 
   // #region useRef
-  const scrollViewRef = useRef(null);
+  const tabScreenFlatListRef = useRef(null);
   const tabScreenScrollX = useRef(new Animated.Value(0)).current;
 
   const {
@@ -29,7 +30,10 @@ export const MainScreen = ({}) => {
   // #region useEffect
   // auto scroll screen to active tab
   useEffect(() => {
-    scrollViewRef.current?.scrollTo({x: Sizes.width * activeTabIndex});
+    tabScreenFlatListRef.current?.scrollToIndex({
+      index: activeTabIndex,
+      animated: true,
+    });
     setOpenTopbar(activeTabIndex === 0);
   }, [activeTabIndex]);
   // #endregion
@@ -41,6 +45,12 @@ export const MainScreen = ({}) => {
 
     setActiveTabIndex(tabIndex);
   };
+
+  const getTabScreenItemLayout = (data, index) => ({
+    length: Sizes.width,
+    offset: Sizes.width * index,
+    index,
+  });
   // #endregion
 
   const tabs = [
@@ -57,10 +67,30 @@ export const MainScreen = ({}) => {
         />
       ),
     },
-    {icon: icons.user, activeIcon: icons.user_filled, title: 'Profile'},
-    {icon: icons.feed, activeIcon: icons.feed_filled, title: 'Feed'},
-    {icon: icons.bell, activeIcon: icons.bell_filled, title: 'Notifications'},
-    {icon: icons.menu, activeIcon: icons.menu, title: 'Menu'},
+    {
+      icon: icons.user,
+      activeIcon: icons.user_filled,
+      title: 'Profile',
+      component: <BlankScreen name="Profile" />,
+    },
+    {
+      icon: icons.feed,
+      activeIcon: icons.feed_filled,
+      title: 'Feed',
+      component: <BlankScreen name="Feed" />,
+    },
+    {
+      icon: icons.bell,
+      activeIcon: icons.bell_filled,
+      title: 'Notifications',
+      component: <BlankScreen name="Notification" />,
+    },
+    {
+      icon: icons.menu,
+      activeIcon: icons.menu,
+      title: 'Menu',
+      component: <BlankScreen name="Menu" />,
+    },
   ];
 
   // #region renders
@@ -137,35 +167,42 @@ export const MainScreen = ({}) => {
     );
   };
 
+  const renderTabScreenItem = ({item, index}) => {
+    return (
+      <View key={'tabscreen' + index} style={styles.screen.container}>
+        {item.component ?? (
+          <Text style={{color: Colors.black}}>{item.title}</Text>
+        )}
+      </View>
+    );
+  };
+
   const renderTabScreen = () => {
     return (
-      <Animated.ScrollView
-        ref={scrollViewRef}
+      <Animated.FlatList
+        ref={tabScreenFlatListRef}
+        data={tabs}
+        renderItem={renderTabScreenItem}
         style={styles.screen.scrollView}
+        initialNumToRender={1}
         bounces={false}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
+        scrollEventThrottle={16}
+        keyboardShouldPersistTaps="always"
+        getItemLayout={getTabScreenItemLayout}
+        onMomentumScrollEnd={handleTabScreenScrollEnd}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {x: tabScreenScrollX}}}],
+          {useNativeDriver: true},
+        )}
         // #region for nested horizontal scrollview to work: https://github.com/facebook/react-native/issues/21436#issuecomment-1204751771
         disableScrollViewPanResponder={true}
         snapToInterval={Sizes.width}
         decelerationRate="fast"
         disableIntervalMomentum={true}
         // #endregion
-        scrollEventThrottle={16}
-        keyboardShouldPersistTaps="always"
-        onMomentumScrollEnd={handleTabScreenScrollEnd}
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {x: tabScreenScrollX}}}],
-          {useNativeDriver: true},
-        )}>
-        {tabs.map((tab, index) => (
-          <View key={'tabscreen' + index} style={styles.screen.container}>
-            {tab.component ?? (
-              <Text style={{color: Colors.black}}>{tab.title}</Text>
-            )}
-          </View>
-        ))}
-      </Animated.ScrollView>
+      />
     );
   };
   // #endregion

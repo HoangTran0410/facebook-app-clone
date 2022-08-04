@@ -5,9 +5,7 @@ import {Colors, FontWeights, Radius, Spacing} from '../../constants/theme';
 import {CircleIconButton} from '../buttons/CircleIconButton';
 import {Avatar} from '../common/Avatar';
 import * as icons from '../../constants/icons';
-
-const myAvatar =
-  'https://scontent-sin6-3.xx.fbcdn.net/v/t39.30808-6/273025268_1947369458767978_3353626377569094262_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=XHCKD2PTUwsAX-XFGmq&_nc_ht=scontent-sin6-3.xx&oh=00_AT8HdFINm5zvtpPzDuXCNOoOZUM5ekhtwsvg4_exLeAYMA&oe=62EF37A2';
+import * as images from '../../constants/images';
 
 const randomAvatar = 'https://i.pravatar.cc/50';
 
@@ -38,7 +36,7 @@ export const WhatDoYouThink = () => {
   return (
     <View style={styles.container}>
       <View style={styles.block1.container}>
-        <Avatar size={50} src={{uri: myAvatar}} outline />
+        <Avatar size={50} src={images.hoangtran_avatar} outline />
 
         <TouchableOpacity style={styles.block1.input.container}>
           <Text style={styles.block1.input.text}>Bạn đang nghĩ gì?</Text>
