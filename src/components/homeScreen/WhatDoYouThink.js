@@ -2,7 +2,7 @@ import React from 'react';
 import {TouchableOpacity, View, StyleSheet, Text, Image} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Colors, FontWeights, Radius, Spacing} from '../../constants/theme';
-import {CircleIconButton} from '../buttons/CircleIconButton';
+import {CircleIconButton} from '../common/CircleIconButton';
 import {Avatar} from '../common/Avatar';
 import * as icons from '../../constants/icons';
 import * as images from '../../constants/images';
