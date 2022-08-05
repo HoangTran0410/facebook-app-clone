@@ -1,0 +1,25 @@
+[
+    {
+        "userId": 0,
+        "timeStamp": "2022-08-04T00:00:00.000Z",
+        "caption": "This is a caption",
+        "attachments": [
+            {
+                "id": 0,
+                "uri": "https://picsum.photos/300/200",
+                "type": "image"
+            },
+            {
+                "id": 1,
+                "uri": "https://picsum.photos/300/200",
+                "type": "video"
+            }
+        ]
+    },
+    {
+        "userId": 0,
+        "timeStamp": "2022-08-05T00:00:00.000Z",
+        "caption": "Hello World",
+        "attachments": []
+    }
+]

@@ -1,16 +1,13 @@
 import React, {forwardRef} from 'react';
-import {View, Animated, StyleSheet, Text, RefreshControl} from 'react-native';
-import {StoriesAndReels, WhatDoYouThink} from '../components';
-import {Colors, Sizes, Spacing} from '../constants/theme';
+import {View, Animated, StyleSheet, RefreshControl} from 'react-native';
+import {StoriesAndReels, WhatDoYouThink, PostCard} from '../components';
+import {Colors} from '../constants/theme';
+import {posts} from '../mocks';
 
 export const HomeScreen = forwardRef(
   ({headerHeight = 0, onScroll, onMomentumScrollEnd}, ref) => {
     const renderItem = ({item, index}) => {
-      return (
-        <View style={styles.item}>
-          <Text>{item}</Text>
-        </View>
-      );
+      return <PostCard data={item} />;
     };
 
     const header = (
@@ -24,9 +21,10 @@ export const HomeScreen = forwardRef(
       <Animated.FlatList
         ref={ref}
         showsVerticalScrollIndicator={false}
+        overScrollMode="never"
         style={styles.container}
         ListHeaderComponent={header}
-        data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+        data={posts}
         renderItem={renderItem}
         scrollEventThrottle={16}
         onScroll={onScroll}
@@ -48,13 +46,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-  },
-  item: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: Sizes.width,
-    height: 200,
-    marginBottom: Spacing.M,
-    backgroundColor: Colors.comment_background,
   },
 });

@@ -1,6 +1,7 @@
 const _users = require('./users.json');
 const _stories = require('./stories.json');
 const _reels = require('./reels.json');
+const _posts = require('./posts.json');
 
 export const me = {
   id: -1,
@@ -22,5 +23,10 @@ export const stories = _stories.map(story => ({
 
 export const reels = _reels.map(reel => ({
   ...reel,
-  user: _users.find(user => user.id === reel.userId),
+  user: users.find(user => user.id === reel.userId),
+}));
+
+export const posts = _posts.map(post => ({
+  ...post,
+  user: users.find(user => user.id === post.userId),
 }));

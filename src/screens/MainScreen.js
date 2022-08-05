@@ -191,9 +191,9 @@ export const MainScreen = ({}) => {
         style={styles.screen.scrollView}
         bounces={false}
         horizontal={true}
+        removeClippedSubviews={true}
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={16}
-        keyboardShouldPersistTaps="always"
         getItemLayout={getTabScreenItemLayout}
         onMomentumScrollEnd={handleTabScreenScrollEnd}
         onScroll={Animated.event(
