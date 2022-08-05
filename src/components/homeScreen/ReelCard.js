@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import {Colors, FontWeights, Radius, Spacing} from '../../constants/theme';
 import * as icons from '../../constants/icons';
 
@@ -22,30 +21,6 @@ export const ReelCard = ({data}) => {
 };
 
 export const CreateReelCard = ({style}) => {
-  const maskedIcon = (
-    <MaskedView
-      style={styles.createReel.maskedIcon.container}
-      maskElement={
-        <Image
-          style={styles.createReel.maskedIcon.icon}
-          source={icons.create_reel}
-        />
-      }>
-      <LinearGradient
-        start={{x: 0, y: 1}}
-        end={{x: 1, y: 0}}
-        colors={[Colors.base_tomato, Colors.base_pink]}
-        style={styles.createReel.linearGradient}
-      />
-    </MaskedView>
-  );
-
-  const plusIcon = (
-    <View style={styles.createReel.plusIcon.container}>
-      <Image source={icons.plus} style={styles.createReel.plusIcon.icon} />
-    </View>
-  );
-
   return (
     <TouchableOpacity style={[styles.container, style]}>
       <LinearGradient
@@ -61,8 +36,20 @@ export const CreateReelCard = ({style}) => {
         {/* Icon container */}
         <View style={styles.createReel.topContainer}>
           <View style={styles.createReel.circleContainer}>
-            {maskedIcon}
-            {plusIcon}
+            {/* Video icon */}
+            <View style={styles.createReel.videoIcon.container}>
+              <Image
+                style={styles.createReel.videoIcon.icon}
+                source={icons.create_reel}
+              />
+            </View>
+            {/* Plus icon */}
+            <View style={styles.createReel.plusIcon.container}>
+              <Image
+                source={icons.plus}
+                style={styles.createReel.plusIcon.icon}
+              />
+            </View>
           </View>
         </View>
 
@@ -103,9 +90,9 @@ const styles = StyleSheet.create({
       padding: Spacing.M,
       backgroundColor: Colors.surface_background,
     },
-    maskedIcon: {
+    videoIcon: {
       container: {width: 35, height: 35},
-      icon: {width: '100%', height: '100%', tintColor: Colors.fds_black},
+      icon: {width: '100%', height: '100%', tintColor: Colors.base_pink},
     },
     plusIcon: {
       container: {
