@@ -1,18 +1,25 @@
 import React from 'react';
-import {Image, StyleSheet, Text} from 'react-native';
+import {ImageBackground, StyleSheet, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Colors, FontWeights, Radius, Spacing} from '../../constants/theme';
 import {Avatar} from '../common/Avatar';
 
-export const Story = () => {
+export const Story = ({data}) => {
+  const {user, src} = data;
   return (
     <TouchableOpacity style={styles.container}>
-      <Image
+      <ImageBackground
+        borderRadius={Radius.L}
         style={styles.image}
-        source={{uri: `https://picsum.photos/seed/${Math.random()}/200/300`}}
+        source={{uri: src}}
       />
-      <Avatar size={40} outline={true} containerStyle={styles.avatar} />
-      <Text style={styles.userName}>Hoang Tran</Text>
+      <Avatar
+        src={{uri: user?.avatar}}
+        size={40}
+        outline={true}
+        containerStyle={styles.avatar}
+      />
+      <Text style={styles.userName}>{user?.name}</Text>
     </TouchableOpacity>
   );
 };
@@ -28,7 +35,9 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
+    opacity: 0.8,
     borderRadius: Radius.L,
+    backgroundColor: Colors.always_dark_overlay,
   },
   avatar: {
     position: 'absolute',

@@ -1,0 +1,22 @@
+[
+  {
+    "id": 0,
+    "name": "John Doe",
+    "avatar": "https://i.pravatar.cc/80?img=0"
+  },
+  {
+    "id": 1,
+    "name": "Iron man",
+    "avatar": "https://i.pravatar.cc/80?img=1"
+  },
+  {
+    "id": 2,
+    "name": "Captain",
+    "avatar": "https://i.pravatar.cc/80?img=3"
+  },
+  {
+    "id": 3,
+    "name": "Natasha",
+    "avatar": "https://i.pravatar.cc/80?img=4"
+  }
+]

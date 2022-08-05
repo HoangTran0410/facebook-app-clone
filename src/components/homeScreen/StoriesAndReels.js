@@ -4,12 +4,17 @@ import {FlatList} from 'react-native-gesture-handler';
 import {Colors, FontWeights, Spacing} from '../../constants/theme';
 import {Reel} from './Reel';
 import {Story} from './Story';
+import {stories, reels} from '../../mocks';
 
 export const StoriesAndReels = () => {
   const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
 
-  const renderItem = ({item, index}) => {
-    return currentTabIndex === 0 ? <Story /> : <Reel />;
+  const renderStoryItem = ({item, index}) => {
+    return <Story data={item} />;
+  };
+
+  const renderReelItem = ({item, index}) => {
+    return <Reel data={item} />;
   };
 
   return (
@@ -32,9 +37,17 @@ export const StoriesAndReels = () => {
       </View>
       <FlatList
         horizontal
-        style={styles.list}
-        data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
-        renderItem={renderItem}
+        contentContainerStyle={styles.listContentContainer}
+        style={[styles.list, currentTabIndex === 0 ? {} : styles.listHidden]}
+        data={stories}
+        renderItem={renderStoryItem}
+      />
+      <FlatList
+        horizontal
+        contentContainerStyle={styles.listContentContainer}
+        style={[styles.list, currentTabIndex === 1 ? {} : styles.listHidden]}
+        data={reels}
+        renderItem={renderReelItem}
       />
     </View>
   );
@@ -70,4 +83,12 @@ const styles = StyleSheet.create({
     color: Colors.base_blue,
   },
   list: {},
+  listContentContainer: {
+    paddingHorizontal: Spacing.M,
+  },
+  listHidden: {
+    height: 0,
+    width: 0,
+    backgroundColor: 'red',
+  },
 });

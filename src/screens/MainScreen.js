@@ -184,7 +184,6 @@ export const MainScreen = ({}) => {
         data={tabs}
         renderItem={renderTabScreenItem}
         style={styles.screen.scrollView}
-        initialNumToRender={1}
         bounces={false}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
