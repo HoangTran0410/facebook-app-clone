@@ -7,8 +7,6 @@ import {Avatar} from '../common/Avatar';
 import * as icons from '../../constants/icons';
 import * as images from '../../constants/images';
 
-const randomAvatar = 'https://i.pravatar.cc/50';
-
 export const WhatDoYouThink = () => {
   const buttons = [
     {

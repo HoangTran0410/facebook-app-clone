@@ -32,7 +32,13 @@ export const HomeScreen = forwardRef(
         onScroll={onScroll}
         onMomentumScrollEnd={onMomentumScrollEnd}
         bounces={false}
-        refreshControl={<RefreshControl refreshing={false} />}
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            colors={[Colors.base_blue]}
+            tintColor={Colors.base_blue}
+          />
+        }
       />
     );
   },

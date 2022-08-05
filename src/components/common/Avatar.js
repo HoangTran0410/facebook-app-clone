@@ -4,8 +4,15 @@ import {Colors} from '../../constants/theme';
 
 const outlineWidth = 2;
 const outlineSpacing = 4;
+const randomAvatar = 'https://i.pravatar.cc/50';
 
-export const Avatar = ({src, size, onPress, outline, containerStyle}) => {
+export const Avatar = ({
+  src = randomAvatar,
+  size = 40,
+  onPress,
+  outline,
+  containerStyle,
+}) => {
   const imgSize = outline ? size - outlineWidth * 2 - outlineSpacing : size;
   return (
     <TouchableOpacity
