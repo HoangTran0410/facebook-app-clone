@@ -1,24 +1,21 @@
 import React from 'react';
 import {TouchableOpacity, Image, StyleSheet, View, Text} from 'react-native';
 import {Colors, FontWeights, Radius, Spacing} from '../../constants/theme';
+import {Badge} from './Badge';
 
 export const CircleIconButton = ({
   icon,
   onPress,
   badge,
-  size = 40,
-  iconSize = 25,
+  size = 37,
+  iconSize = 23,
   style,
   iconStyle,
 }) => {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.container(size), style]}>
       <Image source={icon} style={[styles.icon(iconSize), iconStyle]} />
-      {badge && (
-        <View style={styles.badge.container}>
-          <Text style={styles.badge.text}>{badge}</Text>
-        </View>
-      )}
+      {badge && <Badge value={badge} />}
     </TouchableOpacity>
   );
 };
@@ -38,22 +35,4 @@ const styles = StyleSheet.create({
     height: iconSize,
     tintColor: Colors.primary_icon,
   }),
-  badge: {
-    container: {
-      position: 'absolute',
-      top: Spacing.XXS,
-      right: Spacing.XXS,
-      borderRadius: Radius.L,
-      backgroundColor: Colors.notification_badge,
-      width: 18,
-      height: 18,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    text: {
-      color: Colors.primary_button_text,
-      fontWeight: FontWeights.bold,
-      fontSize: 12,
-    },
-  },
 });

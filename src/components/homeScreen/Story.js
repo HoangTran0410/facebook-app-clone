@@ -16,7 +16,7 @@ export const Story = ({data}) => {
       <Avatar
         src={{uri: user?.avatar}}
         size={40}
-        outline={true}
+        outline={user?.hasStory}
         containerStyle={styles.avatar}
       />
       <Text style={styles.userName}>{user?.name}</Text>
@@ -26,11 +26,12 @@ export const Story = ({data}) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 180,
-    aspectRatio: 0.55,
-    borderRadius: Radius.L,
+    height: 185,
+    aspectRatio: 0.53,
+    borderRadius: Radius.M,
+    borderWidth: 1,
+    borderColor: Colors.media_inner_border,
     backgroundColor: Colors.always_dark_overlay,
-    marginLeft: Spacing.S,
     marginVertical: Spacing.M,
   },
   image: {

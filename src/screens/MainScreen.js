@@ -113,7 +113,7 @@ export const MainScreen = ({}) => {
         <View style={styles.topbar.rightContainer}>
           <CircleIconButton
             icon={icons.search}
-            style={{marginRight: Spacing.L}}
+            style={{marginRight: Spacing.M}}
           />
           <CircleIconButton icon={icons.messenger} badge={4} />
         </View>

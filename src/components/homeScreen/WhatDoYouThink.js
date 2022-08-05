@@ -34,7 +34,7 @@ export const WhatDoYouThink = () => {
   return (
     <View style={styles.container}>
       <View style={styles.block1.container}>
-        <Avatar size={50} src={images.hoangtran_avatar} outline />
+        <Avatar size={45} src={images.hoangtran_avatar} outline />
 
         <TouchableOpacity style={styles.block1.input.container}>
           <Text style={styles.block1.input.text}>Bạn đang nghĩ gì?</Text>
@@ -42,7 +42,7 @@ export const WhatDoYouThink = () => {
 
         <CircleIconButton
           size={40}
-          iconSize={23}
+          iconSize={20}
           icon={icons.gallery}
           iconStyle={styles.block1.gallery.icon}
           style={styles.block1.gallery.container}
@@ -81,13 +81,14 @@ const styles = StyleSheet.create({
     input: {
       container: {
         flex: 1,
-        borderRadius: 25,
+        borderRadius: Radius.XL * 2,
+        borderWidth: 1,
+        borderColor: Colors.media_inner_border,
         marginHorizontal: Spacing.M,
-        paddingVertical: Spacing.M,
+        paddingVertical: Spacing.S,
         paddingLeft: Spacing.L,
         justifyContent: 'center',
         alignItems: 'flex-start',
-        backgroundColor: Colors.comment_background,
       },
       text: {
         fontSize: 16,

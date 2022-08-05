@@ -17,11 +17,12 @@ export const Reel = ({data}) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 180,
-    aspectRatio: 0.55,
-    borderRadius: Radius.L,
+    height: 185,
+    aspectRatio: 0.53,
+    borderRadius: Radius.M,
+    borderWidth: 1,
+    borderColor: Colors.media_inner_border,
     backgroundColor: Colors.always_dark_overlay,
-    marginLeft: Spacing.S,
     marginVertical: Spacing.M,
   },
   image: {
