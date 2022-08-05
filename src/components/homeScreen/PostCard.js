@@ -6,6 +6,21 @@ export const PostCard = ({data}) => {
   const {user, timeStamp, caption, attachments} = data;
   return (
     <View style={styles.container}>
+      {/* Header */}
+      <View></View>
+
+      {/* Caption */}
+      <View></View>
+
+      {/* Attachments */}
+      <View></View>
+
+      {/* Statistic */}
+      <View></View>
+
+      {/* Action Button */}
+      <View></View>
+
       <Text>PostCard</Text>
     </View>
   );
