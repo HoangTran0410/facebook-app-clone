@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {Colors, FontWeights, Spacing} from '../../constants/theme';
-import {ReelCard} from './ReelCard';
+import {CreateReelCard, ReelCard} from './ReelCard';
 import {CreateStoryCard, StoryCard} from './StoryCard';
 import {stories, reels} from '../../mocks';
 
@@ -37,7 +37,7 @@ export const StoriesAndReels = () => {
       title: 'Reels',
       data: reels,
       renderItem: renderReelItem,
-      headerComponent: null,
+      headerComponent: <CreateReelCard style={styles.separator} />,
     },
   ];
 

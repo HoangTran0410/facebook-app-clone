@@ -11,9 +11,9 @@ export const StoryCard = ({data}) => {
   return (
     <TouchableOpacity style={styles.container}>
       <ImageBackground
-        borderRadius={Radius.L}
         style={styles.story.image}
         source={{uri: src}}
+        resizeMode="cover"
       />
       <Avatar
         src={{uri: user?.avatar}}
@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
   story: {
     image: {
       flex: 1,
-      opacity: 0.8,
       borderRadius: Radius.L,
       backgroundColor: Colors.always_dark_overlay,
     },

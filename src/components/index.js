@@ -5,5 +5,5 @@ export {HomeTabButton} from './mainScreen/HomeTabButton';
 
 export {WhatDoYouThink} from './homeScreen/WhatDoYouThink';
 export {StoriesAndReels} from './homeScreen/StoriesAndReels';
-export {ReelCard} from './homeScreen/ReelCard';
-export {StoryCard} from './homeScreen/StoryCard';
+export {ReelCard, CreateReelCard} from './homeScreen/ReelCard';
+export {StoryCard, CreateStoryCard} from './homeScreen/StoryCard';

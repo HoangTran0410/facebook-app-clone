@@ -23,3 +23,4 @@ export const feeling = require('../assets/icons/facebook/feeling.png');
 export const location_filled = require('../assets/icons/facebook/location_filled.png');
 export const plus = require('../assets/icons/facebook/plus.png');
 export const plus_filled = require('../assets/icons/facebook/plus_filled.png');
+export const create_reel = require('../assets/icons/facebook/create_reel.png');
