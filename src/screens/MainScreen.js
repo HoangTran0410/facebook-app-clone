@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
       position: 'absolute',
       bottom: 0,
       left: 0,
-      height: 3,
+      height: 2,
       backgroundColor: Colors.primary_button_background,
       borderTopLeftRadius: Radius.M,
       borderTopRightRadius: Radius.M,

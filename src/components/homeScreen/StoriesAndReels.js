@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     flexDirection: 'row',
-    paddingHorizontal: Spacing.L,
+    paddingHorizontal: Spacing.M,
 
     // shadow - must have background color to work
     backgroundColor: Colors.surface_background,
