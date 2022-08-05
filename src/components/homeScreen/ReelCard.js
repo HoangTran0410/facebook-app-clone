@@ -2,7 +2,7 @@ import React from 'react';
 import {ImageBackground, StyleSheet, TouchableOpacity} from 'react-native';
 import {Colors, Radius, Spacing} from '../../constants/theme';
 
-export const Reel = ({data}) => {
+export const ReelCard = ({data}) => {
   const {src} = data;
   return (
     <TouchableOpacity style={styles.container}>
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.media_inner_border,
     backgroundColor: Colors.always_dark_overlay,
     marginVertical: Spacing.M,
+    overflow: 'hidden',
   },
   image: {
     flex: 1,

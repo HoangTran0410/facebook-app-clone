@@ -5,7 +5,7 @@ import {Colors, FontWeights, Radius, Spacing} from '../../constants/theme';
 import {CircleIconButton} from '../common/CircleIconButton';
 import {Avatar} from '../common/Avatar';
 import * as icons from '../../constants/icons';
-import * as images from '../../constants/images';
+import {me} from '../../mocks';
 
 export const WhatDoYouThink = () => {
   const buttons = [
@@ -34,7 +34,7 @@ export const WhatDoYouThink = () => {
   return (
     <View style={styles.container}>
       <View style={styles.block1.container}>
-        <Avatar size={45} src={images.hoangtran_avatar} outline />
+        <Avatar size={45} src={{uri: me.avatar}} outline />
 
         <TouchableOpacity style={styles.block1.input.container}>
           <Text style={styles.block1.input.text}>Bạn đang nghĩ gì?</Text>

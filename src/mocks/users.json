@@ -2,12 +2,12 @@
   {
     "id": 0,
     "name": "John Doe",
-    "avatar": "https://i.pravatar.cc/80?img=0"
+    "avatar": "https://i.pravatar.cc/80?img=1"
   },
   {
     "id": 1,
     "name": "Iron man",
-    "avatar": "https://i.pravatar.cc/80?img=1"
+    "avatar": "https://i.pravatar.cc/80?img=2"
   },
   {
     "id": 2,
@@ -18,5 +18,10 @@
     "id": 3,
     "name": "Natasha",
     "avatar": "https://i.pravatar.cc/80?img=4"
+  },
+  {
+    "id": 4,
+    "name": "Groot",
+    "avatar": "https://i.pravatar.cc/80?img=5"
   }
 ]

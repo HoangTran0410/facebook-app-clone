@@ -1,13 +1,13 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {Colors, FontWeights, Spacing} from '../../constants/theme';
-import {Reel} from './Reel';
-import {Story} from './Story';
+import {ReelCard} from './ReelCard';
+import {CreateStoryCard, StoryCard} from './StoryCard';
 import {stories, reels} from '../../mocks';
 
 export const StoriesAndReels = () => {
-  const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
+  const [currentTabIndex, setCurrentTabIndex] = useState(0);
 
   const flatListRef = useRef([]);
 
@@ -17,18 +17,28 @@ export const StoriesAndReels = () => {
   };
 
   const renderStoryItem = ({item, index}) => {
-    return <Story data={item} />;
+    return <StoryCard data={item} />;
   };
 
   const renderReelItem = ({item, index}) => {
-    return <Reel data={item} />;
+    return <ReelCard data={item} />;
   };
 
   const renderSeparator = () => <View style={styles.separator} />;
 
   const tabs = [
-    {title: 'Tin', data: stories, renderItem: renderStoryItem},
-    {title: 'Reels', data: reels, renderItem: renderReelItem},
+    {
+      title: 'Tin',
+      data: stories,
+      renderItem: renderStoryItem,
+      headerComponent: <CreateStoryCard style={styles.separator} />,
+    },
+    {
+      title: 'Reels',
+      data: reels,
+      renderItem: renderReelItem,
+      headerComponent: null,
+    },
   ];
 
   return (
@@ -66,6 +76,7 @@ export const StoriesAndReels = () => {
               styles.list,
               currentTabIndex === index ? {} : styles.listHidden,
             ]}
+            ListHeaderComponent={item.headerComponent}
             data={item.data}
             renderItem={item.renderItem}
             ItemSeparatorComponent={renderSeparator}
@@ -90,11 +101,11 @@ const styles = StyleSheet.create({
     shadowColor: Colors.always_black,
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 4,
     },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3,
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
   },
   tabButton: {
     flex: 1,
@@ -125,6 +136,6 @@ const styles = StyleSheet.create({
     width: 0,
   },
   separator: {
-    width: Spacing.S,
+    marginRight: Spacing.S,
   },
 });

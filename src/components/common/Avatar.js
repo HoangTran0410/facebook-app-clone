@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     width: size,
     height: size,
     borderRadius: size / 2,
-    backgroundColor: Colors.fds_white,
+    backgroundColor: Colors.fds_black_alpha_20,
     justifyContent: 'center',
     alignItems: 'center',
   }),

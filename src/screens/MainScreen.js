@@ -7,6 +7,7 @@ import {useHomeScrollEffect} from '../hooks/useHomeScrollEffect';
 import {HomeScreen} from './HomeScreen';
 import {BlankScreen} from './BlankScreen';
 import * as icons from '../constants/icons';
+import {openApp} from '../helpers/utils';
 
 export const MainScreen = ({}) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -115,7 +116,11 @@ export const MainScreen = ({}) => {
             icon={icons.search}
             style={{marginRight: Spacing.M}}
           />
-          <CircleIconButton icon={icons.messenger} badge={4} />
+          <CircleIconButton
+            icon={icons.messenger}
+            badge={4}
+            onPress={() => openApp('https://www.m.me')}
+          />
         </View>
       </Animated.View>
     );
