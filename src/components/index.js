@@ -1,5 +1,6 @@
 export {Avatar} from './common/Avatar';
 export {CircleIconButton} from './common/CircleIconButton';
+export {ReactionPopup} from './common/ReactionPopup';
 
 export {HomeTabButton} from './mainScreen/HomeTabButton';
 

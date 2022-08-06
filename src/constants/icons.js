@@ -24,3 +24,15 @@ export const location_filled = require('../assets/icons/facebook/location_filled
 export const plus = require('../assets/icons/facebook/plus.png');
 export const plus_filled = require('../assets/icons/facebook/plus_filled.png');
 export const create_reel = require('../assets/icons/facebook/create_reel.png');
+export const like = require('../assets/icons/facebook/like.png');
+export const comment = require('../assets/icons/facebook/comment.png');
+export const share = require('../assets/icons/facebook/share.png');
+
+// reactions
+export const reaction_like = require('../assets/icons/facebook/reaction-3d/like.png');
+export const reaction_love = require('../assets/icons/facebook/reaction-3d/love.png');
+export const reaction_care = require('../assets/icons/facebook/reaction-3d/care.png');
+export const reaction_haha = require('../assets/icons/facebook/reaction-3d/haha.png');
+export const reaction_wow = require('../assets/icons/facebook/reaction-3d/wow.png');
+export const reaction_sad = require('../assets/icons/facebook/reaction-3d/sad.png');
+export const reaction_angry = require('../assets/icons/facebook/reaction-3d/angry.png');
