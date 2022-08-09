@@ -40,11 +40,17 @@ export const MainScreen = ({}) => {
   // #endregion
 
   // #region handlers
+  const updateSelectedPage = nextPage => {
+    // TODO: add logic here
+  };
+
   const handleTabScreenScrollEnd = event => {
     const x = event.nativeEvent.contentOffset.x;
     const tabIndex = Math.round(x / Sizes.width);
 
-    setActiveTabIndex(tabIndex);
+    if (tabIndex !== activeTabIndex) {
+      setActiveTabIndex(tabIndex);
+    }
   };
 
   const getTabScreenItemLayout = (data, index) => ({
@@ -196,6 +202,7 @@ export const MainScreen = ({}) => {
         scrollEventThrottle={16}
         getItemLayout={getTabScreenItemLayout}
         onMomentumScrollEnd={handleTabScreenScrollEnd}
+        onMomentumScrollBegin={handleTabScreenScrollEnd}
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {x: tabScreenScrollX}}}],
           {useNativeDriver: true},
@@ -206,6 +213,12 @@ export const MainScreen = ({}) => {
         decelerationRate="fast"
         disableIntervalMomentum={true}
         // #endregion
+        directionalLockEnabled
+        alwaysBounceVertical={false}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="always"
+        automaticallyAdjustContentInsets={false}
+        scrollsToTop={false}
       />
     );
   };

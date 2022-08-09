@@ -16,7 +16,7 @@ export const PostCard = ({data}) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View></View>
+      <View style={{height: 300}}></View>
 
       {/* Caption */}
       <View></View>
@@ -31,6 +31,7 @@ export const PostCard = ({data}) => {
       <View style={styles.actionButtonContainer}>
         {actionButtons.map((item, index) => (
           <ActionButton
+            key={'action-btn' + index}
             icon={item.icon}
             text={item.text}
             onPress={item.onPress}
