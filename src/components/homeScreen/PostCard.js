@@ -1,7 +1,6 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Colors, Sizes, Spacing} from '../../constants/theme';
-import {ReactionPopup} from '../common/ReactionPopup';
 import * as icons from '../../constants/icons';
 
 export const PostCard = ({data}) => {
@@ -38,9 +37,6 @@ export const PostCard = ({data}) => {
           />
         ))}
       </View>
-
-      {/* Reactions popup */}
-      <ReactionPopup style={{}} />
     </View>
   );
 };

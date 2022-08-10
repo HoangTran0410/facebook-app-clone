@@ -1,24 +1,17 @@
-import React, {useEffect, useRef} from 'react';
-import {
-  Image,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Animated,
-  LayoutAnimation,
-} from 'react-native';
+import React, {useRef} from 'react';
+import {Image, StyleSheet, Animated, PanResponder, View} from 'react-native';
 import {Colors, Spacing} from '../../constants/theme';
 import * as icons from '../../constants/icons';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 const reactions = [
-  {name: 'like', icon: icons.reaction_like},
-  {name: 'love', icon: icons.reaction_love},
-  {name: 'care', icon: icons.reaction_care},
-  {name: 'haha', icon: icons.reaction_haha},
-  {name: 'wow', icon: icons.reaction_wow},
-  {name: 'sad', icon: icons.reaction_sad},
-  {name: 'angry', icon: icons.reaction_angry},
+  {name: 'Thích', icon: icons.reaction_like},
+  {name: 'Yêu thích', icon: icons.reaction_love},
+  {name: 'Thương Thương', icon: icons.reaction_care},
+  {name: 'Haha', icon: icons.reaction_haha},
+  {name: 'Wow', icon: icons.reaction_wow},
+  {name: 'Buồn', icon: icons.reaction_sad},
+  {name: 'Phẫn nộ', icon: icons.reaction_angry},
 ];
 
 // https://www.codedaily.io/tutorials/How-to-make-Facebook-Reactions
@@ -33,14 +26,44 @@ const reactions = [
 //   {id: 'angry', img: 'http://i.imgur.com/1MgcQg0.gif'},
 // ];
 
-const AnimatedButton = Animated.createAnimatedComponent(TouchableOpacity);
-
 export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
   const selectedIndexRef = useRef(-1);
+
+  const iconLayoutRef = useRef([]);
 
   const iconAnimRef = useRef(reactions.map(() => new Animated.Value(0)));
   const iconPaddingAnimRef = useRef(reactions.map(() => new Animated.Value(0)));
   const containerAnimRef = useRef(new Animated.Value(0));
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onPanResponderTerminate: (evt, gestureState) => {},
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
+      onMoveShouldSetPanResponder: (evt, gestureState) => true,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onShouldBlockNativeResponder: (evt, gestureState) => false,
+      onPanResponderTerminationRequest: (evt, gestureState) => false,
+      onPanResponderGrant: (evt, gestureState) => true,
+      onPanResponderMove: (evt, gestureState) => {
+        console.log('abc');
+
+        // get current position
+        const {moveX, moveY} = gestureState;
+        // detect which icon is hovering
+        const index = iconLayoutRef.current.findIndex(
+          ({x, y, width, height}) =>
+            moveX > x && moveX < x + width && moveY > y && moveY < y + height,
+        );
+        console.log(moveX, moveY, iconLayoutRef.current);
+        // select that icon
+        selectReaction(index);
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        selectReaction(-1);
+      },
+    }),
+  ).current;
 
   const selectReaction = index => {
     let oldIndex = selectedIndexRef.current;
@@ -49,7 +72,7 @@ export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
     // save selected index
     selectedIndexRef.current = newIndex;
 
-    const duration = 1000;
+    const duration = 150;
 
     Animated.parallel(
       [
@@ -96,56 +119,66 @@ export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
     ).start();
   };
 
-  return (
-    <Animated.View
-      style={[
-        styles.container,
-        {
-          transform: [
-            {
-              scale: containerAnimRef.current.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 0.9],
-              }),
-            },
-          ],
-        },
-        style,
-      ]}>
-      {reactions.map(({name, icon, img}, index) => {
-        const scale = iconAnimRef.current[index].interpolate({
-          inputRange: [0, 1],
-          outputRange: [1, 2],
-        });
-        const translateY = iconAnimRef.current[index].interpolate({
-          inputRange: [0, 1],
-          outputRange: [0, -10],
-        });
-        const paddingHorizontal = iconPaddingAnimRef.current[index].interpolate(
-          {
-            inputRange: [0, 1],
-            outputRange: [0, Spacing.L],
-          },
-        );
+  const renderReaction = () =>
+    reactions.map(({name, icon, img}, index) => {
+      const scale = iconAnimRef.current[index].interpolate({
+        inputRange: [0, 1],
+        outputRange: [1, 2],
+      });
+      const translateY = iconAnimRef.current[index].interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, -10],
+      });
+      const paddingHorizontal = iconPaddingAnimRef.current[index].interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, Spacing.XL],
+      });
 
-        return (
-          <AnimatedButton
-            activeOpacity={1}
-            key={'reaction' + index}
-            onPress={() => {
-              selectReaction(index);
-            }}
-            style={[
+      return (
+        <Animated.View
+          key={'reaction' + index}
+          pointerEvents="none"
+          onLayout={event => {
+            iconLayoutRef.current[index] = event.nativeEvent.layout;
+          }}
+          style={[{paddingHorizontal, transform: [{scale}, {translateY}]}]}>
+          <Image source={icon ?? {uri: img}} style={styles.icon(index)} />
+        </Animated.View>
+      );
+    });
+
+  return (
+    // <TouchableWithoutFeedback style={{}}>
+    <View
+      style={{
+        flex: 1,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: Colors.fds_red_55,
+      }}>
+      <Animated.View
+        {...panResponder.panHandlers}
+        style={[
+          styles.container,
+          {
+            transform: [
               {
-                paddingHorizontal,
-                transform: [{scale}, {translateY}],
+                scale: containerAnimRef.current.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1, 0.9],
+                }),
               },
-            ]}>
-            <Image source={icon ?? {uri: img}} style={styles.icon(index)} />
-          </AnimatedButton>
-        );
-      })}
-    </Animated.View>
+            ],
+          },
+          style,
+        ]}>
+        {renderReaction()}
+      </Animated.View>
+    </View>
+    // </TouchableWithoutFeedback>
   );
 };
 
