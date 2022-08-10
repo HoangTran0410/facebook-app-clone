@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   Image,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Animated,
+  LayoutAnimation,
 } from 'react-native';
 import {Colors, Spacing} from '../../constants/theme';
 import * as icons from '../../constants/icons';
@@ -32,72 +33,114 @@ const reactions = [
 //   {id: 'angry', img: 'http://i.imgur.com/1MgcQg0.gif'},
 // ];
 
-const AnimatedButton = Animated.createAnimatedComponent(
-  TouchableWithoutFeedback,
-);
+const AnimatedButton = Animated.createAnimatedComponent(TouchableOpacity);
 
 export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
   const selectedIndexRef = useRef(-1);
-  const animsRef = useRef(reactions.map(() => new Animated.Value(0)));
+
+  const iconAnimRef = useRef(reactions.map(() => new Animated.Value(0)));
+  const iconPaddingAnimRef = useRef(reactions.map(() => new Animated.Value(0)));
   const containerAnimRef = useRef(new Animated.Value(0));
 
-  const hoverReaction = index => {
-    const preSelect = selectedIndexRef.current;
-    selectedIndexRef.current = index;
+  const selectReaction = index => {
+    let oldIndex = selectedIndexRef.current;
+    let newIndex = selectedIndexRef.current !== index ? index : -1;
 
-    const anims = reactions.map((_, i) => {
-      const scaleValue = i === index ? 1 : 0;
-      return Animated.timing(animsRef.current[i], {
-        toValue: scaleValue,
-        duration: 100,
-        useNativeDriver: true,
-      });
-    });
+    // save selected index
+    selectedIndexRef.current = newIndex;
 
-    if (preSelect === -1) {
-      anims.push(
+    const duration = 1000;
+
+    Animated.parallel(
+      [
+        // animate icons
+        newIndex >= 0
+          ? Animated.timing(iconAnimRef.current[newIndex], {
+              toValue: 1,
+              duration,
+              useNativeDriver: false,
+            })
+          : null,
+        oldIndex >= 0
+          ? Animated.timing(iconAnimRef.current[oldIndex], {
+              toValue: 0,
+              duration,
+              useNativeDriver: false,
+            })
+          : null,
+
+        // animate container
         Animated.timing(containerAnimRef.current, {
-          toValue: 1,
-          duration: 100,
-          useNativeDriver: true,
+          toValue: newIndex !== -1 ? 1 : 0,
+          duration,
+          useNativeDriver: false,
         }),
-      );
-    }
 
-    Animated.parallel(anims, {
-      stopTogether: false,
-    }).start();
+        // animate padding
+        newIndex >= 0
+          ? Animated.timing(iconPaddingAnimRef.current[newIndex], {
+              toValue: 1,
+              duration,
+              useNativeDriver: false,
+            })
+          : null,
+        oldIndex >= 0
+          ? Animated.timing(iconPaddingAnimRef.current[oldIndex], {
+              toValue: 0,
+              duration,
+              useNativeDriver: false,
+            })
+          : null,
+      ],
+      {stopTogether: false},
+    ).start();
   };
-
-  const containerScale = containerAnimRef.current.interpolate({
-    inputRange: [0, 1],
-    outputRange: [1, 0.9],
-  });
 
   return (
     <Animated.View
-      style={[styles.container, {transform: [{scale: containerScale}]}, style]}>
+      style={[
+        styles.container,
+        {
+          transform: [
+            {
+              scale: containerAnimRef.current.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 0.9],
+              }),
+            },
+          ],
+        },
+        style,
+      ]}>
       {reactions.map(({name, icon, img}, index) => {
-        const anim = animsRef.current[index];
-        const scale = anim.interpolate({
+        const scale = iconAnimRef.current[index].interpolate({
           inputRange: [0, 1],
           outputRange: [1, 2],
         });
-        const translateY = anim.interpolate({
+        const translateY = iconAnimRef.current[index].interpolate({
           inputRange: [0, 1],
           outputRange: [0, -10],
         });
+        const paddingHorizontal = iconPaddingAnimRef.current[index].interpolate(
+          {
+            inputRange: [0, 1],
+            outputRange: [0, Spacing.L],
+          },
+        );
 
         return (
           <AnimatedButton
             activeOpacity={1}
             key={'reaction' + index}
-            onPressIn={() => {
-              hoverReaction(index);
+            onPress={() => {
+              selectReaction(index);
             }}
-            style={{
-              transform: [{scale}, {translateY}],
-            }}>
+            style={[
+              {
+                paddingHorizontal,
+                transform: [{scale}, {translateY}],
+              },
+            ]}>
             <Image source={icon ?? {uri: img}} style={styles.icon(index)} />
           </AnimatedButton>
         );
