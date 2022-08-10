@@ -1,79 +1,108 @@
 import React, {useRef} from 'react';
-import {Image, StyleSheet, View, PanResponder, Animated} from 'react-native';
-import * as icons from '../../constants/icons';
+import {
+  Image,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Animated,
+} from 'react-native';
 import {Colors, Spacing} from '../../constants/theme';
+import * as icons from '../../constants/icons';
 
-// const reactions = [
-//   {name: 'like', icon: icons.reaction_like},
-//   {name: 'love', icon: icons.reaction_love},
-//   {name: 'care', icon: icons.reaction_care},
-//   {name: 'haha', icon: icons.reaction_haha},
-//   {name: 'wow', icon: icons.reaction_wow},
-//   {name: 'sad', icon: icons.reaction_sad},
-//   {name: 'angry', icon: icons.reaction_angry},
-// ];
+const reactions = [
+  {name: 'like', icon: icons.reaction_like},
+  {name: 'love', icon: icons.reaction_love},
+  {name: 'care', icon: icons.reaction_care},
+  {name: 'haha', icon: icons.reaction_haha},
+  {name: 'wow', icon: icons.reaction_wow},
+  {name: 'sad', icon: icons.reaction_sad},
+  {name: 'angry', icon: icons.reaction_angry},
+];
 
 // https://www.codedaily.io/tutorials/How-to-make-Facebook-Reactions
 // https://medium.com/@duytq94/facebook-reactions-animation-with-react-native-8f750e136ff5
-var reactions = [
-  {id: 'like', img: 'http://i.imgur.com/LwCYmcM.gif'},
-  {id: 'love', img: 'http://i.imgur.com/k5jMsaH.gif'},
-  {id: 'haha', img: 'http://i.imgur.com/f93vCxM.gif'},
-  {id: 'yay', img: 'http://i.imgur.com/a44ke8c.gif'},
-  {id: 'wow', img: 'http://i.imgur.com/9xTkN93.gif'},
-  {id: 'sad', img: 'http://i.imgur.com/tFOrN5d.gif'},
-  {id: 'angry', img: 'http://i.imgur.com/1MgcQg0.gif'},
-];
+// var reactions = [
+//   {id: 'like', img: 'http://i.imgur.com/LwCYmcM.gif'},
+//   {id: 'love', img: 'http://i.imgur.com/k5jMsaH.gif'},
+//   {id: 'haha', img: 'http://i.imgur.com/f93vCxM.gif'},
+//   {id: 'yay', img: 'http://i.imgur.com/a44ke8c.gif'},
+//   {id: 'wow', img: 'http://i.imgur.com/9xTkN93.gif'},
+//   {id: 'sad', img: 'http://i.imgur.com/tFOrN5d.gif'},
+//   {id: 'angry', img: 'http://i.imgur.com/1MgcQg0.gif'},
+// ];
+
+const AnimatedButton = Animated.createAnimatedComponent(
+  TouchableWithoutFeedback,
+);
 
 export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
-  const pan = useRef(new Animated.ValueXY()).current;
+  const selectedIndexRef = useRef(-1);
+  const animsRef = useRef(reactions.map(() => new Animated.Value(0)));
+  const containerAnimRef = useRef(new Animated.Value(0));
 
-  const panResponder = React.useRef(
-    PanResponder.create({
-      // Ask to be the responder:
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
-      onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+  const hoverReaction = index => {
+    const preSelect = selectedIndexRef.current;
+    selectedIndexRef.current = index;
 
-      onPanResponderGrant: (evt, gestureState) => {
-        // The gesture has started. Show visual feedback so the user knows
-        // what is happening!
-        // gestureState.d{x,y} will be set to zero now
-        pan.setOffset({
-          x: pan.x._value,
-          y: pan.y._value,
-        });
-      },
-      onPanResponderMove: Animated.event([null, {dx: pan.x, dy: pan.y}], {
+    const anims = reactions.map((_, i) => {
+      const scaleValue = i === index ? 1 : 0;
+      return Animated.timing(animsRef.current[i], {
+        toValue: scaleValue,
+        duration: 100,
         useNativeDriver: true,
-      }),
-      onPanResponderTerminationRequest: (evt, gestureState) => true,
-      onPanResponderRelease: (evt, gestureState) => {
-        // The user has released all touches while this view is the
-        // responder. This typically means a gesture has succeeded
-        pan.flattenOffset();
-      },
-      onPanResponderTerminate: (evt, gestureState) => {
-        // Another component has become the responder, so this gesture
-        // should be cancelled
-      },
-      onShouldBlockNativeResponder: (evt, gestureState) => {
-        // Returns whether this component should block native components from becoming the JS
-        // responder. Returns true by default. Is currently only supported on android.
-        return true;
-      },
-    }),
-  ).current;
+      });
+    });
+
+    if (preSelect === -1) {
+      anims.push(
+        Animated.timing(containerAnimRef.current, {
+          toValue: 1,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+      );
+    }
+
+    Animated.parallel(anims, {
+      stopTogether: false,
+    }).start();
+  };
+
+  const containerScale = containerAnimRef.current.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 0.9],
+  });
 
   return (
-    <View style={[styles.container, style]} {...panResponder.panHandlers}>
-      {reactions.map(({name, icon, img}, index) => (
-        <Animated.View style={{}} key={'reaction' + index}>
-          <Image source={icon || {uri: img}} style={styles.icon(index)} />
-        </Animated.View>
-      ))}
-    </View>
+    <Animated.View
+      style={[styles.container, {transform: [{scale: containerScale}]}, style]}>
+      {reactions.map(({name, icon, img}, index) => {
+        const anim = animsRef.current[index];
+        const scale = anim.interpolate({
+          inputRange: [0, 1],
+          outputRange: [1, 2],
+        });
+        const translateY = anim.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -10],
+        });
+
+        return (
+          <AnimatedButton
+            activeOpacity={1}
+            key={'reaction' + index}
+            onPressIn={() => {
+              hoverReaction(index);
+            }}
+            style={{
+              transform: [{scale}, {translateY}],
+            }}>
+            <Image source={icon ?? {uri: img}} style={styles.icon(index)} />
+          </AnimatedButton>
+        );
+      })}
+    </Animated.View>
   );
 };
 

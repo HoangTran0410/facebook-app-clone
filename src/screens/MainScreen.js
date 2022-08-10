@@ -219,6 +219,7 @@ export const MainScreen = ({}) => {
         keyboardShouldPersistTaps="always"
         automaticallyAdjustContentInsets={false}
         scrollsToTop={false}
+        overScrollMode="never"
       />
     );
   };
