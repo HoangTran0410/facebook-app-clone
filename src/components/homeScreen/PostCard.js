@@ -6,6 +6,7 @@ import * as icons from '../../constants/icons';
 
 export const PostCard = ({data}) => {
   const {user, timeStamp, caption, attachments} = data;
+  const isShowFullCaption = caption.length > 100;
 
   const actionButtons = [
     {icon: icons.like, text: 'Thích', onPress: null},
@@ -16,19 +17,21 @@ export const PostCard = ({data}) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={{height: 300}}></View>
+      <View style={styles.header}></View>
 
       {/* Caption */}
-      <View></View>
+      <View style={styles.caption.container}>
+        <Text style={styles.caption.text}>{caption}</Text>
+      </View>
 
       {/* Attachments */}
-      <View></View>
+      <View style={styles.attachments}></View>
 
       {/* Statistic */}
-      <View></View>
+      <View style={styles.statistics}></View>
 
       {/* Action Button */}
-      <View style={styles.actionButtonContainer}>
+      <View style={styles.actionButton.container}>
         {actionButtons.map((item, index) => (
           <ActionButton
             key={'action-btn' + index}
@@ -53,10 +56,26 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.M,
     backgroundColor: Colors.surface_background,
   },
-  actionButtonContainer: {
-    flexDirection: 'row',
-    borderTopWidth: 1,
-    borderColor: Colors.media_inner_border,
+  header: {},
+  caption: {
+    container: {
+      width: '100%',
+      paddingVertical: Spacing.S,
+      paddingHorizontal: Spacing.L,
+    },
+    text: {
+      textAlign: 'left',
+      color: Colors.primary_text,
+    },
+  },
+  attachments: {},
+  statistics: {},
+  actionButton: {
+    container: {
+      flexDirection: 'row',
+      borderTopWidth: 1,
+      borderColor: Colors.media_inner_border,
+    },
   },
 });
 
