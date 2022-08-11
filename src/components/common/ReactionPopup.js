@@ -1,79 +1,177 @@
 import React, {useRef} from 'react';
-import {Image, StyleSheet, View, PanResponder, Animated} from 'react-native';
-import * as icons from '../../constants/icons';
+import {
+  Image,
+  StyleSheet,
+  Animated,
+  PanResponder,
+  View,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {Colors, Spacing} from '../../constants/theme';
+import * as icons from '../../constants/icons';
+import {useStore} from '../../store/store';
+import {uiSelectors} from '../../store/uiSlice';
 
-// const reactions = [
-//   {name: 'like', icon: icons.reaction_like},
-//   {name: 'love', icon: icons.reaction_love},
-//   {name: 'care', icon: icons.reaction_care},
-//   {name: 'haha', icon: icons.reaction_haha},
-//   {name: 'wow', icon: icons.reaction_wow},
-//   {name: 'sad', icon: icons.reaction_sad},
-//   {name: 'angry', icon: icons.reaction_angry},
-// ];
+const reactions = [
+  {name: 'Thích', icon: icons.reaction_like},
+  {name: 'Yêu thích', icon: icons.reaction_love},
+  {name: 'Thương Thương', icon: icons.reaction_care},
+  {name: 'Haha', icon: icons.reaction_haha},
+  {name: 'Wow', icon: icons.reaction_wow},
+  {name: 'Buồn', icon: icons.reaction_sad},
+  {name: 'Phẫn nộ', icon: icons.reaction_angry},
+];
 
 // https://www.codedaily.io/tutorials/How-to-make-Facebook-Reactions
 // https://medium.com/@duytq94/facebook-reactions-animation-with-react-native-8f750e136ff5
-var reactions = [
-  {id: 'like', img: 'http://i.imgur.com/LwCYmcM.gif'},
-  {id: 'love', img: 'http://i.imgur.com/k5jMsaH.gif'},
-  {id: 'haha', img: 'http://i.imgur.com/f93vCxM.gif'},
-  {id: 'yay', img: 'http://i.imgur.com/a44ke8c.gif'},
-  {id: 'wow', img: 'http://i.imgur.com/9xTkN93.gif'},
-  {id: 'sad', img: 'http://i.imgur.com/tFOrN5d.gif'},
-  {id: 'angry', img: 'http://i.imgur.com/1MgcQg0.gif'},
-];
+// var reactions = [
+//   {id: 'like', img: 'http://i.imgur.com/LwCYmcM.gif'},
+//   {id: 'love', img: 'http://i.imgur.com/k5jMsaH.gif'},
+//   {id: 'haha', img: 'http://i.imgur.com/f93vCxM.gif'},
+//   {id: 'yay', img: 'http://i.imgur.com/a44ke8c.gif'},
+//   {id: 'wow', img: 'http://i.imgur.com/9xTkN93.gif'},
+//   {id: 'sad', img: 'http://i.imgur.com/tFOrN5d.gif'},
+//   {id: 'angry', img: 'http://i.imgur.com/1MgcQg0.gif'},
+// ];
 
 export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
-  const pan = useRef(new Animated.ValueXY()).current;
+  const isReactionPopupVisible = useStore(uiSelectors.isReactionPopupVisible);
+  const toggleReactionPopup = useStore(uiSelectors.toggleReactionPopup);
 
-  const panResponder = React.useRef(
+  const selectedIndexRef = useRef(-1);
+  const iconLayoutRef = useRef([]);
+  const iconAnimRef = useRef(reactions.map(() => new Animated.Value(0)));
+  const containerAnimRef = useRef(new Animated.Value(0));
+
+  const panResponder = useRef(
     PanResponder.create({
-      // Ask to be the responder:
+      onPanResponderTerminate: (evt, gestureState) => {},
       onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onShouldBlockNativeResponder: (evt, gestureState) => false,
+      onPanResponderTerminationRequest: (evt, gestureState) => false,
+      onPanResponderGrant: (evt, gestureState) => true,
+      onPanResponderMove: (evt, gestureState) => {
+        console.log('abc');
 
-      onPanResponderGrant: (evt, gestureState) => {
-        // The gesture has started. Show visual feedback so the user knows
-        // what is happening!
-        // gestureState.d{x,y} will be set to zero now
-        pan.setOffset({
-          x: pan.x._value,
-          y: pan.y._value,
-        });
+        // get current position
+        const {moveX, moveY} = gestureState;
+        // detect which icon is hovering
+        const index = iconLayoutRef.current.findIndex(
+          ({x, y, width, height}) =>
+            moveX > x && moveX < x + width && moveY > y && moveY < y + height,
+        );
+        console.log(moveX, moveY, iconLayoutRef.current);
+        // select that icon
+        selectReaction(index);
       },
-      onPanResponderMove: Animated.event([null, {dx: pan.x, dy: pan.y}], {
-        useNativeDriver: true,
-      }),
-      onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderRelease: (evt, gestureState) => {
-        // The user has released all touches while this view is the
-        // responder. This typically means a gesture has succeeded
-        pan.flattenOffset();
-      },
-      onPanResponderTerminate: (evt, gestureState) => {
-        // Another component has become the responder, so this gesture
-        // should be cancelled
-      },
-      onShouldBlockNativeResponder: (evt, gestureState) => {
-        // Returns whether this component should block native components from becoming the JS
-        // responder. Returns true by default. Is currently only supported on android.
-        return true;
+        selectReaction(-1);
       },
     }),
   ).current;
 
-  return (
-    <View style={[styles.container, style]} {...panResponder.panHandlers}>
-      {reactions.map(({name, icon, img}, index) => (
-        <Animated.View style={{}} key={'reaction' + index}>
-          <Image source={icon || {uri: img}} style={styles.icon(index)} />
+  const selectReaction = index => {
+    let oldIndex = selectedIndexRef.current;
+    let newIndex = selectedIndexRef.current !== index ? index : -1;
+
+    // save selected index
+    selectedIndexRef.current = newIndex;
+
+    const duration = 150;
+
+    Animated.parallel(
+      [
+        // animate icons
+        newIndex >= 0
+          ? Animated.timing(iconAnimRef.current[newIndex], {
+              toValue: 1,
+              duration,
+              useNativeDriver: false,
+            })
+          : null,
+        oldIndex >= 0
+          ? Animated.timing(iconAnimRef.current[oldIndex], {
+              toValue: 0,
+              duration,
+              useNativeDriver: false,
+            })
+          : null,
+
+        // animate container
+        Animated.timing(containerAnimRef.current, {
+          toValue: newIndex >= 0 ? 1 : 0,
+          duration,
+          useNativeDriver: false,
+        }),
+      ],
+      {stopTogether: false},
+    ).start();
+  };
+
+  const renderReaction = () =>
+    reactions.map(({name, icon, img}, index) => {
+      const ref = iconAnimRef.current[index];
+      const scale = ref.interpolate({
+        inputRange: [0, 1],
+        outputRange: [1, 2],
+      });
+      const translateY = ref.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, -10],
+      });
+      const paddingHorizontal = ref.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, Spacing.XL],
+      });
+
+      return (
+        <Animated.View
+          key={'reaction' + index}
+          pointerEvents="none"
+          onLayout={event => {
+            iconLayoutRef.current[index] = event.nativeEvent.layout;
+          }}
+          style={[{paddingHorizontal, transform: [{scale}, {translateY}]}]}>
+          <Image source={icon ?? {uri: img}} style={styles.icon(index)} />
         </Animated.View>
-      ))}
-    </View>
+      );
+    });
+
+  if (!isReactionPopupVisible) return null;
+
+  return (
+    <TouchableWithoutFeedback onPress={toggleReactionPopup}>
+      <View
+        style={{
+          ...StyleSheet.absoluteFill,
+          // backgroundColor: Colors.fds_red_55,
+        }}>
+        <Animated.View
+          {...panResponder.panHandlers}
+          style={[
+            styles.container,
+            {
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              transform: [
+                {
+                  scale: containerAnimRef.current.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 0.9],
+                  }),
+                },
+              ],
+            },
+            style,
+          ]}>
+          {renderReaction()}
+        </Animated.View>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

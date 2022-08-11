@@ -27,6 +27,7 @@ export const create_reel = require('../assets/icons/facebook/create_reel.png');
 export const like = require('../assets/icons/facebook/like.png');
 export const comment = require('../assets/icons/facebook/comment.png');
 export const share = require('../assets/icons/facebook/share.png');
+export const logo = require('../assets/icons/facebook/logo.png');
 
 // reactions
 export const reaction_like = require('../assets/icons/facebook/reaction-3d/like.png');

@@ -1,6 +1,12 @@
 import React from 'react';
-import {Image, ImageBackground, StyleSheet, Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  Image,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import {Colors, FontWeights, Radius, Spacing} from '../../constants/theme';
 import {Avatar} from '../common/Avatar';
 import * as icons from '../../constants/icons';
