@@ -1,8 +1,16 @@
 import React, {useRef} from 'react';
-import {Image, StyleSheet, Animated, PanResponder, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Animated,
+  PanResponder,
+  View,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {Colors, Spacing} from '../../constants/theme';
 import * as icons from '../../constants/icons';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {useStore} from '../../store/store';
+import {uiSelectors} from '../../store/uiSlice';
 
 const reactions = [
   {name: 'Thích', icon: icons.reaction_like},
@@ -27,12 +35,12 @@ const reactions = [
 // ];
 
 export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
+  const isReactionPopupVisible = useStore(uiSelectors.isReactionPopupVisible);
+  const toggleReactionPopup = useStore(uiSelectors.toggleReactionPopup);
+
   const selectedIndexRef = useRef(-1);
-
   const iconLayoutRef = useRef([]);
-
   const iconAnimRef = useRef(reactions.map(() => new Animated.Value(0)));
-  const iconPaddingAnimRef = useRef(reactions.map(() => new Animated.Value(0)));
   const containerAnimRef = useRef(new Animated.Value(0));
 
   const panResponder = useRef(
@@ -94,26 +102,10 @@ export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
 
         // animate container
         Animated.timing(containerAnimRef.current, {
-          toValue: newIndex !== -1 ? 1 : 0,
+          toValue: newIndex >= 0 ? 1 : 0,
           duration,
           useNativeDriver: false,
         }),
-
-        // animate padding
-        newIndex >= 0
-          ? Animated.timing(iconPaddingAnimRef.current[newIndex], {
-              toValue: 1,
-              duration,
-              useNativeDriver: false,
-            })
-          : null,
-        oldIndex >= 0
-          ? Animated.timing(iconPaddingAnimRef.current[oldIndex], {
-              toValue: 0,
-              duration,
-              useNativeDriver: false,
-            })
-          : null,
       ],
       {stopTogether: false},
     ).start();
@@ -121,15 +113,16 @@ export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
 
   const renderReaction = () =>
     reactions.map(({name, icon, img}, index) => {
-      const scale = iconAnimRef.current[index].interpolate({
+      const ref = iconAnimRef.current[index];
+      const scale = ref.interpolate({
         inputRange: [0, 1],
         outputRange: [1, 2],
       });
-      const translateY = iconAnimRef.current[index].interpolate({
+      const translateY = ref.interpolate({
         inputRange: [0, 1],
         outputRange: [0, -10],
       });
-      const paddingHorizontal = iconPaddingAnimRef.current[index].interpolate({
+      const paddingHorizontal = ref.interpolate({
         inputRange: [0, 1],
         outputRange: [0, Spacing.XL],
       });
@@ -147,38 +140,38 @@ export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
       );
     });
 
+  if (!isReactionPopupVisible) return null;
+
   return (
-    // <TouchableWithoutFeedback style={{}}>
-    <View
-      style={{
-        flex: 1,
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: Colors.fds_red_55,
-      }}>
-      <Animated.View
-        {...panResponder.panHandlers}
-        style={[
-          styles.container,
-          {
-            transform: [
-              {
-                scale: containerAnimRef.current.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [1, 0.9],
-                }),
-              },
-            ],
-          },
-          style,
-        ]}>
-        {renderReaction()}
-      </Animated.View>
-    </View>
-    // </TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={toggleReactionPopup}>
+      <View
+        style={{
+          ...StyleSheet.absoluteFill,
+          // backgroundColor: Colors.fds_red_55,
+        }}>
+        <Animated.View
+          {...panResponder.panHandlers}
+          style={[
+            styles.container,
+            {
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              transform: [
+                {
+                  scale: containerAnimRef.current.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [1, 0.9],
+                  }),
+                },
+              ],
+            },
+            style,
+          ]}>
+          {renderReaction()}
+        </Animated.View>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

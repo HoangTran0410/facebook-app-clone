@@ -4,6 +4,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {MainScreen} from './screens/MainScreen';
 import {ReactionPopup} from './components';
+import {LoadingScreen} from './screens/LoadingScreen';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -11,7 +12,8 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={{flex: 1}}>
-        <MainScreen />
+        <LoadingScreen />
+        {/* <MainScreen /> */}
         <ReactionPopup />
       </GestureHandlerRootView>
     </SafeAreaProvider>
