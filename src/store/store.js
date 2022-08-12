@@ -4,8 +4,9 @@ import {persist} from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {createUiSlice} from './uiSlice';
+import {createSelectors} from './createSelectors';
 
-export const useStore = create(
+export const useStoreBase = create(
   immer(
     persist(
       (set, get) => ({
@@ -19,3 +20,5 @@ export const useStore = create(
     ),
   ),
 );
+
+// export const useStore = createSelectors(useStoreBase);
