@@ -35,8 +35,10 @@ const reactions = [
 // ];
 
 export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
-  const isReactionPopupVisible = useStore(uiSelectors.isReactionPopupVisible);
-  const toggleReactionPopup = useStore(uiSelectors.toggleReactionPopup);
+  const reactionPopupPosition = useStore(uiSelectors.reactionPopupPosition);
+  const setReactionPopupPosition = useStore(
+    uiSelectors.setReactionPopupPosition,
+  );
 
   const selectedIndexRef = useRef(-1);
   const iconLayoutRef = useRef([]);
@@ -140,36 +142,39 @@ export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
       );
     });
 
-  if (!isReactionPopupVisible) return null;
+  if (!reactionPopupPosition) return null;
 
   return (
-    <TouchableWithoutFeedback onPress={toggleReactionPopup}>
-      <View
-        style={{
-          ...StyleSheet.absoluteFill,
-          // backgroundColor: Colors.fds_red_55,
-        }}>
-        <Animated.View
-          {...panResponder.panHandlers}
-          style={[
-            styles.container,
-            {
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              transform: [
-                {
-                  scale: containerAnimRef.current.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [1, 0.9],
-                  }),
-                },
-              ],
-            },
-            style,
-          ]}>
-          {renderReaction()}
-        </Animated.View>
+    <TouchableWithoutFeedback onPress={() => setReactionPopupPosition(null)}>
+      <View style={{...StyleSheet.absoluteFill}}>
+        <View
+          style={{
+            position: 'absolute',
+            top: reactionPopupPosition?.y,
+            left: reactionPopupPosition?.x,
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Animated.View
+            {...panResponder.panHandlers}
+            style={[
+              styles.container,
+              {
+                transform: [
+                  {
+                    scale: containerAnimRef.current.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [1, 0.9],
+                    }),
+                  },
+                ],
+              },
+              style,
+            ]}>
+            {renderReaction()}
+          </Animated.View>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -178,7 +183,7 @@ export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: Spacing.XS,
+    padding: Spacing.S,
     borderRadius: 100,
 
     backgroundColor: Colors.surface_background,
@@ -193,6 +198,6 @@ const styles = StyleSheet.create({
   icon: index => ({
     width: 40,
     height: 40,
-    marginLeft: index === 0 ? 0 : Spacing.XS,
+    marginLeft: index === 0 ? 0 : Spacing.S,
   }),
 });

@@ -61,11 +61,11 @@ const styles = StyleSheet.create({
   },
   grayText: {
     color: Colors.fds_white_alpha_50,
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: FontWeights.regular,
   },
   whiteText: {
-    fontSize: 15,
+    fontSize: 16,
     color: Colors.fds_white,
     fontWeight: FontWeights.bold,
   },

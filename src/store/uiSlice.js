@@ -1,16 +1,17 @@
 export const createUiSlice = (set, get) => ({
   uiSlice: {
-    isReactionPopupVisible: true,
+    reactionPopupPosition: null,
   },
   uiSliceAction: {
-    toggleReactionPopup: () =>
+    setReactionPopupPosition: position =>
       set(state => {
-        state.isReactionPopupVisible = !state.isReactionPopupVisible;
+        state.uiSlice.reactionPopupPosition = position;
       }),
   },
 });
 
 export const uiSelectors = {
-  isReactionPopupVisible: state => state.uiSlice.isReactionPopupVisible,
-  toggleReactionPopup: state => state.uiSliceAction.toggleReactionPopup,
+  reactionPopupPosition: state => state.uiSlice.reactionPopupPosition,
+  setReactionPopupPosition: state =>
+    state.uiSliceAction.setReactionPopupPosition,
 };

@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createUiSlice} from './uiSlice';
 import {createSelectors} from './createSelectors';
 
-export const useStoreBase = create(
+export const useStore = create(
   immer(
     persist(
       (set, get) => ({

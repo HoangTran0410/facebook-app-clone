@@ -1,17 +1,19 @@
-import React from 'react';
+import React, {useRef, forwardRef} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Colors, Sizes, Spacing} from '../../constants/theme';
 import * as icons from '../../constants/icons';
+import {useStore} from '../../store/store';
+import {uiSelectors} from '../../store/uiSlice';
 
 export const PostCard = ({data}) => {
+  const setReactionPopupPosition = useStore(
+    uiSelectors.setReactionPopupPosition,
+  );
+
   const {user, timeStamp, caption, attachments} = data;
   const isShowFullCaption = caption.length > 100;
 
-  const actionButtons = [
-    {icon: icons.like, text: 'Thích', onPress: null},
-    {icon: icons.comment, text: 'Bình luận', onPress: null},
-    {icon: icons.share, text: 'Chia sẻ', onPress: null},
-  ];
+  const likeBtnRef = useRef(null);
 
   return (
     <View style={styles.container}>
@@ -31,14 +33,22 @@ export const PostCard = ({data}) => {
 
       {/* Action Button */}
       <View style={styles.actionButton.container}>
-        {actionButtons.map((item, index) => (
-          <ActionButton
-            key={'action-btn' + index}
-            icon={item.icon}
-            text={item.text}
-            onPress={item.onPress}
-          />
-        ))}
+        <ActionButton
+          ref={likeBtnRef}
+          icon={icons.like}
+          text={'Thích'}
+          onPress={null}
+          onLongPress={() => {
+            likeBtnRef.current?.measure((x, y, width, height, pageX, pageY) => {
+              setReactionPopupPosition({
+                x: pageX,
+                y: pageY - height - Spacing.M,
+              });
+            });
+          }}
+        />
+        <ActionButton icon={icons.comment} text={'Bình luận'} onPress={null} />
+        <ActionButton icon={icons.share} text={'Chia sẻ'} onPress={null} />
       </View>
     </View>
   );
@@ -75,14 +85,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const ActionButton = ({icon, text, onPress}) => {
+const ActionButton = forwardRef(({icon, text, onPress, onLongPress}, ref) => {
   return (
-    <TouchableOpacity style={actionButtonStyles.container} onPress={onPress}>
+    <TouchableOpacity
+      ref={ref}
+      style={actionButtonStyles.container}
+      onPress={onPress}
+      onLongPress={onLongPress}>
       <Image source={icon} style={actionButtonStyles.icon} />
       <Text style={actionButtonStyles.text}>{text}</Text>
     </TouchableOpacity>
   );
-};
+});
 
 const actionButtonStyles = StyleSheet.create({
   container: {
