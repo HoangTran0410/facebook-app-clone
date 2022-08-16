@@ -77,6 +77,7 @@ export const PostCard = ({data}) => {
       <TouchableOpacity
         style={styles.statistics.container}
         onPress={openComment}>
+        {/* reactions */}
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
           <View style={{flexDirection: 'row-reverse'}}>
             {topReactions.reverse().map((_, index) => (
@@ -99,6 +100,8 @@ export const PostCard = ({data}) => {
             {NumberFormat.thousand(reactionsCount)}
           </Text>
         </View>
+
+        {/* comments and shareÏ */}
         <View style={styles.statistics.rightContainer}>
           <Text>{NumberFormat.thousand(statistics.comments)} bình luận</Text>
           <View style={styles.statistics.dot} />
