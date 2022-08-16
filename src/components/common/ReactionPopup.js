@@ -7,20 +7,10 @@ import {
   View,
   TouchableWithoutFeedback,
 } from 'react-native';
+import {reactions} from '../../constants/global';
 import {Colors, Spacing} from '../../constants/theme';
-import * as icons from '../../constants/icons';
 import {useStore} from '../../store/store';
 import {uiSelectors} from '../../store/uiSlice';
-
-const reactions = [
-  {name: 'Thích', icon: icons.reaction_like},
-  {name: 'Yêu thích', icon: icons.reaction_love},
-  {name: 'Thương Thương', icon: icons.reaction_care},
-  {name: 'Haha', icon: icons.reaction_haha},
-  {name: 'Wow', icon: icons.reaction_wow},
-  {name: 'Buồn', icon: icons.reaction_sad},
-  {name: 'Phẫn nộ', icon: icons.reaction_angry},
-];
 
 // https://www.codedaily.io/tutorials/How-to-make-Facebook-Reactions
 // https://medium.com/@duytq94/facebook-reactions-animation-with-react-native-8f750e136ff5
@@ -147,15 +137,7 @@ export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
   return (
     <TouchableWithoutFeedback onPress={() => setReactionPopupPosition(null)}>
       <View style={{...StyleSheet.absoluteFill}}>
-        <View
-          style={{
-            position: 'absolute',
-            top: reactionPopupPosition?.y,
-            left: reactionPopupPosition?.x,
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+        <View style={styles.outer(reactionPopupPosition)}>
           <Animated.View
             {...panResponder.panHandlers}
             style={[
@@ -181,6 +163,14 @@ export const ReactionPopup = ({style, onChooseReact = () => {}}) => {
 };
 
 const styles = StyleSheet.create({
+  outer: position => ({
+    position: 'absolute',
+    top: position?.y,
+    left: position?.x,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }),
   container: {
     flexDirection: 'row',
     padding: Spacing.S,

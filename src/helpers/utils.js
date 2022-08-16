@@ -36,3 +36,8 @@ export const openAppWithAppID = appID => {
   }
   return Linking.openURL(`https://itunes.apple.com/us/app/${appID}`);
 };
+
+export const NumberFormat = {
+  // https://stackoverflow.com/a/2901298
+  thousand: (num = 0) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'),
+};
