@@ -1,11 +1,12 @@
 import React, {useRef, forwardRef, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Colors, Sizes, Spacing} from '../../constants/theme';
+import {Colors, FontWeights, Sizes, Spacing} from '../../constants/theme';
 import * as icons from '../../constants/icons';
 import {useStore} from '../../store/store';
 import {uiSelectors} from '../../store/uiSlice';
 import {NumberFormat} from '../../helpers/utils';
 import {reactions} from '../../constants/global';
+import {Avatar} from '../common/Avatar';
 
 const maxLengthCaption = 200;
 
@@ -34,12 +35,10 @@ export const PostCard = ({data}) => {
   const sortedReactionKeys = Object.keys(statistics.reactions).sort((a, b) => {
     return statistics.reactions[b] - statistics.reactions[a];
   });
-  const topReactions = reactions.filter(_ => {
-    return (
-      sortedReactionKeys.slice(0, 3).includes(_.id) && // top 3 reactions
-      statistics.reactions[_.id] > reactionsCount / 100 // at least 1% of total reactions
-    );
-  });
+  const topReactions = sortedReactionKeys
+    .slice(0, 3) // top 3 reactions
+    .filter(key => statistics.reactions[key] > reactionsCount / 100) // at least 1% of total reactions
+    .map(key => reactions.find(_ => _.id === key));
   // #endregion
 
   // #region handlers
@@ -55,7 +54,16 @@ export const PostCard = ({data}) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}></View>
+      <TouchableOpacity style={styles.header}>
+        <Avatar src={{uri: user.avatar}} size={45} outline={user.hasStory} />
+        <View style={{flex: 1, paddingHorizontal: Spacing.S}}>
+          <Text
+            style={{fontWeight: FontWeights.heavy, color: Colors.primary_text}}>
+            {user.name}
+          </Text>
+          <Text>2 giờ</Text>
+        </View>
+      </TouchableOpacity>
 
       {/* Caption */}
       <TouchableOpacity
@@ -78,34 +86,28 @@ export const PostCard = ({data}) => {
         style={styles.statistics.container}
         onPress={openComment}>
         {/* reactions */}
-        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-          <View style={{flexDirection: 'row-reverse'}}>
+        <View style={styles.statistics.leftContainer}>
+          <View style={styles.statistics.reactionContainer}>
             {topReactions.reverse().map((_, index) => (
-              <View
-                key={_.id}
-                style={{
-                  padding: Spacing.XS / 2,
-                  backgroundColor: Colors.surface_background,
-                  borderRadius: 100,
-                  marginRight: -Spacing.XS * 2,
-                }}>
-                <Image
-                  source={_.icon}
-                  style={{width: 18, height: 18, borderRadius: 18}}
-                />
+              <View key={_.id} style={styles.statistics.reactionItem}>
+                <Image source={_.icon} style={styles.statistics.reactionIcon} />
               </View>
             ))}
           </View>
-          <Text style={{marginLeft: Spacing.M}}>
+          <Text style={[styles.statistics.text, {marginLeft: Spacing.M}]}>
             {NumberFormat.thousand(reactionsCount)}
           </Text>
         </View>
 
         {/* comments and shareÏ */}
         <View style={styles.statistics.rightContainer}>
-          <Text>{NumberFormat.thousand(statistics.comments)} bình luận</Text>
+          <Text style={styles.statistics.text}>
+            {NumberFormat.thousand(statistics.comments)} bình luận
+          </Text>
           <View style={styles.statistics.dot} />
-          <Text>{NumberFormat.thousand(statistics.shares)} lượt chia sẻ</Text>
+          <Text style={styles.statistics.text}>
+            {NumberFormat.thousand(statistics.shares)} lượt chia sẻ
+          </Text>
         </View>
       </TouchableOpacity>
 
@@ -140,7 +142,12 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.M,
     backgroundColor: Colors.surface_background,
   },
-  header: {},
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: Spacing.M,
+  },
   caption: {
     container: {
       width: '100%',
@@ -163,13 +170,27 @@ const styles = StyleSheet.create({
       paddingVertical: Spacing.S,
       paddingHorizontal: Spacing.L,
     },
+    reactionContainer: {flexDirection: 'row-reverse'},
+    reactionItem: {
+      padding: Spacing.XS / 2,
+      backgroundColor: Colors.surface_background,
+      borderRadius: 100,
+      marginRight: -Spacing.XS,
+    },
+    reactionIcon: {width: 16, height: 16, borderRadius: 18},
+    leftContainer: {flex: 1, flexDirection: 'row', alignItems: 'center'},
     rightContainer: {flexDirection: 'row', alignItems: 'center'},
     dot: {
-      width: Spacing.XS,
-      height: Spacing.XS,
-      borderRadius: Spacing.XS,
+      width: 3,
+      height: 3,
+      borderRadius: 3,
       backgroundColor: Colors.secondary_text,
       marginHorizontal: Spacing.S,
+    },
+    text: {
+      color: Colors.secondary_text,
+      fontSize: 13,
+      fontWeight: FontWeights.medium,
     },
   },
   actionButton: {
