@@ -8,16 +8,19 @@ import {createSelectors} from './createSelectors';
 
 export const useStore = create(
   immer(
-    persist(
-      (set, get) => ({
-        // some state here
-        ...createUiSlice(set, get),
-      }),
-      {
-        name: 'facebookclone-storage',
-        getStorage: () => AsyncStorage,
-      },
-    ),
+    // persist(
+    //   (set, get) => ({
+    //     // some state here
+    //     ...createUiSlice(set, get),
+    //   }),
+    //   {
+    //     name: 'facebookclone-storage',
+    //     getStorage: () => AsyncStorage,
+    //   },
+    // ),
+    (set, get) => ({
+      ...createUiSlice(set, get),
+    }),
   ),
 );
 

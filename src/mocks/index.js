@@ -6,9 +6,9 @@ const _posts = require('./posts.json');
 export const me = {
   id: -1,
   name: 'Hoang Tran',
-  avatar:
-    'https://scontent-sin6-3.xx.fbcdn.net/v/t39.30808-6/273025268_1947369458767978_3353626377569094262_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=kCroS7oJZY4AX9OMVpc&_nc_ht=scontent-sin6-3.xx&oh=00_AT_7CJixhq_Nc89zzJMxDve5pKIEGwukZmsbfSbHaezafQ&oe=62F131E2',
-  hasStory: true,
+  avatar: 'https://i.pravatar.cc/200',
+  // 'https://scontent-sin6-3.xx.fbcdn.net/v/t39.30808-6/273025268_1947369458767978_3353626377569094262_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=kCroS7oJZY4AX9OMVpc&_nc_ht=scontent-sin6-3.xx&oh=00_AT_7CJixhq_Nc89zzJMxDve5pKIEGwukZmsbfSbHaezafQ&oe=62F131E2',
+  hasStory: false,
 };
 
 export const users = _users.map(user => ({

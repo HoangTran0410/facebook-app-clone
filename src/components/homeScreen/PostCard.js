@@ -7,6 +7,7 @@ import {uiSelectors} from '../../store/uiSlice';
 import {NumberFormat} from '../../helpers/utils';
 import {reactions} from '../../constants/global';
 import {Avatar} from '../common/Avatar';
+import {CircleIconButton} from '../common/CircleIconButton';
 
 const maxLengthCaption = 200;
 
@@ -55,14 +56,56 @@ export const PostCard = ({data}) => {
     <View style={styles.container}>
       {/* Header */}
       <TouchableOpacity style={styles.header}>
-        <Avatar src={{uri: user.avatar}} size={45} outline={user.hasStory} />
+        <Avatar src={{uri: user.avatar}} size={40} outline={user.hasStory} />
+
+        {/* User name + timeÏ */}
         <View style={{flex: 1, paddingHorizontal: Spacing.S}}>
           <Text
-            style={{fontWeight: FontWeights.heavy, color: Colors.primary_text}}>
+            style={{
+              fontWeight: FontWeights.heavy,
+              color: Colors.primary_text,
+              fontSize: 16,
+            }}>
             {user.name}
           </Text>
-          <Text>2 giờ</Text>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text
+              style={{
+                fontWeight: FontWeights.medium,
+                color: Colors.secondary_text,
+                fontSize: 13,
+              }}>
+              2 giờ
+            </Text>
+            <View style={styles.dot} />
+            <Image
+              source={icons.public_share}
+              style={{width: 12, height: 12, tintColor: Colors.secondary_text}}
+            />
+          </View>
         </View>
+
+        {/* Action buttons */}
+        <CircleIconButton
+          icon={icons.more}
+          size={30}
+          style={{
+            alignSelf: 'flex-start',
+            backgroundColor: Colors.transparent,
+            marginTop: -Spacing.S,
+          }}
+        />
+        <CircleIconButton
+          icon={icons.close}
+          size={30}
+          style={{
+            marginTop: -Spacing.S,
+            alignSelf: 'flex-start',
+            backgroundColor: Colors.transparent,
+            borderRadius: 0,
+            marginLeft: Spacing.M,
+          }}
+        />
       </TouchableOpacity>
 
       {/* Caption */}
@@ -144,9 +187,16 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     padding: Spacing.M,
+    paddingBottom: Spacing.S,
+  },
+  dot: {
+    width: 2,
+    height: 2,
+    borderRadius: 2,
+    backgroundColor: Colors.secondary_text,
+    marginHorizontal: Spacing.S / 1.5,
   },
   caption: {
     container: {
@@ -155,6 +205,8 @@ const styles = StyleSheet.create({
       paddingHorizontal: Spacing.L,
     },
     text: {
+      fontWeight: FontWeights.medium,
+      fontSize: 16,
       textAlign: 'left',
       color: Colors.primary_text,
     },

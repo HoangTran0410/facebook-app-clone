@@ -11,12 +11,13 @@ import {MainScreen} from './screens/MainScreen';
 import {ReactionPopup} from './components';
 import {LoadingScreen} from './screens/LoadingScreen';
 import {useStore} from './store/store';
-import {useHydration} from './hooks';
+// import {useHydration} from './hooks';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const hydrated = useHydration();
+  // const hydrated = useHydration();
+  const hydrated = true;
   const isDarkMode = useColorScheme() === 'dark';
 
   return (

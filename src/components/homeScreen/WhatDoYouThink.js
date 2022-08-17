@@ -34,7 +34,7 @@ export const WhatDoYouThink = () => {
   return (
     <View style={styles.container}>
       <View style={styles.block1.container}>
-        <Avatar size={45} src={{uri: me.avatar}} outline />
+        <Avatar size={45} src={{uri: me.avatar}} outline={me.hasStory} />
 
         <TouchableOpacity style={styles.block1.input.container}>
           <Text style={styles.block1.input.text}>Bạn đang nghĩ gì?</Text>

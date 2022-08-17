@@ -28,6 +28,9 @@ export const like = require('../assets/icons/facebook/like.png');
 export const comment = require('../assets/icons/facebook/comment.png');
 export const share = require('../assets/icons/facebook/share.png');
 export const logo = require('../assets/icons/facebook/logo.png');
+export const public_share = require('../assets/icons/facebook/public.png');
+export const more = require('../assets/icons/facebook/more.png');
+export const close = require('../assets/icons/facebook/close.png');
 
 // reactions
 export const reaction_like = require('../assets/icons/facebook/reaction-3d/like.png');
