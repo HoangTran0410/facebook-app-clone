@@ -1,4 +1,4 @@
-import React, {useRef, forwardRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Colors, FontWeights, Sizes, Spacing} from '../../constants/theme';
 import * as icons from '../../constants/icons';
@@ -8,6 +8,8 @@ import {NumberFormat} from '../../helpers/utils';
 import {reactions} from '../../constants/global';
 import {Avatar} from '../common/Avatar';
 import {CircleIconButton} from '../common/CircleIconButton';
+import {ActionButton} from './postCard/ActionButton';
+import {AttachmentsZone} from './postCard/AttachmentZone';
 
 const maxLengthCaption = 200;
 
@@ -50,16 +52,33 @@ export const PostCard = ({data}) => {
   const copyCaption = () => {};
 
   const openComment = () => {};
+
+  const openProfile = () => {};
+
+  const openStory = () => {
+    if (user.hasStory) {
+      // open story
+    } else {
+      openProfile();
+    }
+  };
   // #endregion
 
   return (
     <View style={styles.container}>
       {/* Header */}
-      <TouchableOpacity style={styles.header}>
-        <Avatar src={{uri: user.avatar}} size={40} outline={user.hasStory} />
+      <View style={styles.header}>
+        <Avatar
+          src={{uri: user.avatar}}
+          size={40}
+          outline={user.hasStory}
+          onPress={openStory}
+        />
 
-        {/* User name + timeÏ */}
-        <View style={{flex: 1, paddingHorizontal: Spacing.S}}>
+        {/* User name + time */}
+        <TouchableOpacity
+          style={{flex: 1, paddingHorizontal: Spacing.S}}
+          onPress={openProfile}>
           <Text
             style={{
               fontWeight: FontWeights.heavy,
@@ -83,7 +102,7 @@ export const PostCard = ({data}) => {
               style={{width: 12, height: 12, tintColor: Colors.secondary_text}}
             />
           </View>
-        </View>
+        </TouchableOpacity>
 
         {/* Action buttons */}
         <CircleIconButton
@@ -106,7 +125,7 @@ export const PostCard = ({data}) => {
             marginLeft: Spacing.M,
           }}
         />
-      </TouchableOpacity>
+      </View>
 
       {/* Caption */}
       <TouchableOpacity
@@ -122,7 +141,7 @@ export const PostCard = ({data}) => {
       </TouchableOpacity>
 
       {/* Attachments */}
-      <View style={styles.attachments}></View>
+      <AttachmentsZone attachments={attachments} />
 
       {/* Statistic */}
       <TouchableOpacity
@@ -214,7 +233,6 @@ const styles = StyleSheet.create({
       color: Colors.secondary_text,
     },
   },
-  attachments: {},
   statistics: {
     container: {
       flexDirection: 'row',
@@ -251,34 +269,5 @@ const styles = StyleSheet.create({
       borderTopWidth: 1,
       borderColor: Colors.media_inner_border,
     },
-  },
-});
-
-const ActionButton = forwardRef(({icon, text, onPress, onLongPress}, ref) => {
-  return (
-    <TouchableOpacity
-      ref={ref}
-      style={actionButtonStyles.container}
-      onPress={onPress}
-      onLongPress={onLongPress}>
-      <Image source={icon} style={actionButtonStyles.icon} />
-      <Text style={actionButtonStyles.text}>{text}</Text>
-    </TouchableOpacity>
-  );
-});
-
-const actionButtonStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: Spacing.M,
-  },
-  icon: {width: 25, height: 25, tintColor: Colors.secondary_icon},
-  text: {
-    fontSize: 13,
-    marginLeft: Spacing.XS,
-    color: Colors.secondary_text,
   },
 });
